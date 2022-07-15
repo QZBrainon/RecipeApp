@@ -1,21 +1,17 @@
 import React from 'react';
-import Header from '../components/Header';
 import underConstrucion from '../images/under_construction.svg';
-import Footer from '../components/Footer';
 
-function Recipes() {
+function RecipeInProgress() {
   return (
-    <div>
-      <Header />
+    <main>
       <img
         src={ underConstrucion }
         alt="site em construção..."
         className="under_construction"
       />
       <h4>mulheres e homens trabalhando!</h4>
-      <Footer />
-    </div>
+    </main>
   );
 }
 
-export default Recipes;
+export default RecipeInProgress;
