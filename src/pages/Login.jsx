@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const INITIAL_USER_DATA = {
   email: '',
@@ -6,6 +7,7 @@ const INITIAL_USER_DATA = {
 };
 function Login() {
   const [userData, setUserData] = useState(INITIAL_USER_DATA);
+  const history = useHistory();
   const { email, password } = userData;
 
   const handleChange = ({ target: { name, value } }) => {
@@ -16,7 +18,11 @@ function Login() {
   };
 
   const handleClick = () => {
-    console.log('é apenas um teste!');
+    const userEmail = JSON.stringify({ email });
+    localStorage.setItem('user', userEmail);
+    localStorage.setItem('mealsToken', '1');
+    localStorage.setItem('cocktailsToken', '1');
+    history.push('/foods');
   };
 
   const verifyConditions = () => {

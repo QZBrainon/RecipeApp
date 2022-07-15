@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Login from './pages/Login';
+import Recipes from './pages/Recipes';
 // import rockGlass from './images/rockGlass.svg';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -10,6 +11,7 @@ function App() {
     <div>
       <Router>
         <Route exact path="/" component={ Login } />
+        <Route path="/foods" component={ Recipes } />
       </Router>
     </div>
     // <div className="meals">
