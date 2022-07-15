@@ -45,7 +45,6 @@ function Header() {
         (location.pathname === '/foods' || location.pathname === '/drinks') && (
           <button
             type="button"
-            data-testid="search-input"
             onClick={ toggleButton }
           >
             <img
