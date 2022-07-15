@@ -66,3 +66,17 @@
     transform: rotate(-10deg);
   }
 }
+
+.loginItens {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  height: 13vh;
+  justify-content: space-between;
+  margin: 30vh auto;
+  width: 75%;
+}
+
+.under_construction {
+  width: 180px;
+}
