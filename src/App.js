@@ -16,11 +16,11 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={ Login } />
-          <Route exact path="foods/:id-da-receita" component={ Recipes } />
-          <Route path="/foods" component={ Recipes } />
-          <Route path="/drinks" component={ Drinks } />
-          <Route exact path="drinks/:id-da-receita" component={ Drinks } />
-          <Route exact path="/foods/:id-da-receita/in-progress" component={ Recipes } />
+          <Route exact path="/foods" component={ Recipes } />
+          <Route exact path="/drinks" component={ Drinks } />
+          <Route path="/foods/:id-da-receita" component={ Recipes } />
+          <Route path="/drinks/:id-da-receita" component={ Drinks } />
+          <Route path="/foods/:id-da-receita/in-progress" component={ Recipes } />
           <Route path="/profile" component={ Profile } />
           <Route path="/done-recipes" component={ DoneRecipes } />
           <Route path="/favorite-recipes" component={ FavoriteRecipes } />
