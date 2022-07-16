@@ -2,10 +2,11 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
+import renderWithRouter from './renderWithRouter';
 
 describe('Testes da Tela de Login', () => {
   beforeEach(() => {
-    render(<App />);
+    renderWithRouter(<App />)
   })
   test('01. Os campos de email e senha, além do botão "Enter" são renderizados', () => {
     const inputEmail = screen.getByRole('textbox', { name: /e-mail/i });
