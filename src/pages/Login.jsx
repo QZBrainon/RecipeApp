@@ -55,6 +55,7 @@ function Login() {
           id="password"
           name="password"
           data-testid="password-input"
+          autoComplete="off"
           onChange={ handleChange }
           value={ password }
         />

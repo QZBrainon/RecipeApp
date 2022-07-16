@@ -5,7 +5,7 @@ import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
 
 function Header() {
-  const [isvisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const location = useLocation();
   const history = useHistory();
 
@@ -24,8 +24,7 @@ function Header() {
   };
 
   const toggleButton = () => {
-    console.log(isvisible);
-    if (isvisible === false) {
+    if (isVisible === false) {
       return setIsVisible(true);
     }
     return setIsVisible(false);
@@ -57,7 +56,7 @@ function Header() {
       }
       <div>
         {
-          isvisible && <SearchBar />
+          isVisible && <SearchBar />
         }
       </div>
     </main>

@@ -1,9 +1,12 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
-import underConstrucion from '../images/under_construction.svg';
 import Footer from '../components/Footer';
+import underConstrucion from '../images/under_construction.svg';
 
 function Recipes() {
+  const history = useHistory();
+  console.log(history.location.pathname);
   return (
     <div>
       <Header />

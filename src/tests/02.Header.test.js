@@ -2,13 +2,12 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Recipes from '../pages/Recipes';
-import renderWithRouter from '../renderWithRouter';
+import renderWithRouter from './renderWithRouter';
 
 
-describe(' Testes Header', () => {
+describe(' Testes do componente Header', () => {
   
   it('01. Testa se o botão de busca exibe e esconde a barra de busca', () => {
-
     const { history } = renderWithRouter(<Recipes />);
     history.push('/foods');
 
@@ -25,7 +24,7 @@ describe(' Testes Header', () => {
   it('02. Testa se ao clicar no botão profile, acessamos a página profile', () => {
     const { history } = renderWithRouter(<Recipes />);
     history.push('/foods');
-    
+
     const profileBtn = screen.getByRole('button', {name: 'img-profile'});
     userEvent.click(profileBtn);
     
