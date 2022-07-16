@@ -21,7 +21,6 @@ function Provider({ children }) {
       const value = data[dataKey[0]];
       setFoodsList([...value]);
     };
-
     fetchData(ENDPOINT_FOOD);
   }, []);
 
@@ -33,7 +32,6 @@ function Provider({ children }) {
       const value = data[dataKey[0]];
       setDrinksList([...value]);
     };
-
     fetchData(ENDPOINT_DRINK);
   }, []);
 
