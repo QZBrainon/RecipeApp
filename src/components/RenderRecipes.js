@@ -5,7 +5,6 @@ import ReceitasContext from '../hooks/ReceitasContext';
 function RenderRecipes() {
   const history = useHistory();
   const actualPath = history.location.pathname;
-
   const { recipesData } = useContext(ReceitasContext);
 
   const renderCards = (recipes, recipeName, thumb) => recipes.map((recipe, index) => (
