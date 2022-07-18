@@ -5,10 +5,6 @@ import Recipes from '../pages/Recipes';
 import renderWithRouter from './renderWithRouter';
 
 describe('Testes do componente Footer', () => {
-  // beforeEach(() => {
-  //   const { history } = renderWithRouter(<Recipes />);
-  //   history.push('/foods');
-  // });
 
   it('Teste se ao clicar nos botões do Footer, o App navega para as respectivas páginas', () => {
     const { history } = renderWithRouter(<Recipes />);

@@ -31,7 +31,7 @@ function Header() {
   };
 
   return (
-    <main>
+    <header>
       <h1 data-testid="page-title">{ getTitle() }</h1>
       <button type="button" onClick={ handleClick }>
         <img
@@ -59,7 +59,7 @@ function Header() {
           isVisible && <SearchBar />
         }
       </div>
-    </main>
+    </header>
   );
 }
 

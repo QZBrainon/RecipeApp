@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReceitasContext from './ReceitasContext';
-import { ENDPOINT_DRINK, ENDPOINT_FOOD } from './endpoints';
+import { ENDPOINT_DRINK, ENDPOINT_FIRSTLTTER, ENDPOINT_FOOD,
+  ENDPOINT_INGREDIENT, ENDPOINT_NAME } from './endpoints';
 
 function Provider({ children }) {
   const INITIAL_STATE = {
@@ -12,6 +13,7 @@ function Provider({ children }) {
   const [recipesData, setRecipesData] = useState(INITIAL_STATE);
   const [foodsList, setFoodsList] = useState([]);
   const [drinksList, setDrinksList] = useState([]);
+  const [isSearchResult, setSearchResult] = useState(false);
 
   useEffect(() => {
     const fetchData = async (endpoint) => {
@@ -42,8 +44,29 @@ function Provider({ children }) {
     });
   }, [foodsList, drinksList]);
 
+  function runSearch({ searchInput, radioInput }, pathname) {
+    // const searchTerm = searchInput.replace(/\s/g, '%20');
+    // const letterEndpoint = ENDPOINT_FIRSTLTTER + searchTerm;
+    // const nameEndpoint = ENDPOINT_NAME + searchTerm;
+    // const ingredientEndpoint = ENDPOINT_INGREDIENT + searchTerm;
+
+    // if (pathname === '/foods') {
+    //   switch (radioInput) {
+    //   case ('first letter'):
+    //     return console.log(letterEndpoint);
+    //   case ('name'):
+    //     return console.log(nameEndpoint);
+    //   default:
+    //     return console.log(ingredientEndpoint);
+    //   }
+    // }
+  }
+
   const contextValue = {
     recipesData,
+    runSearch,
+    isSearchResult,
+    setSearchResult,
   };
 
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { getByRole, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Recipes from '../pages/Recipes';
 import renderWithRouter from './renderWithRouter';
@@ -16,15 +16,15 @@ describe('Testes do componente Search Bar', () => {
     const searchBar = screen.getByRole('textbox', { name: ''});
     userEvent.type(searchBar, 'teste');
 
-    const radioButtons = screen.getAllByRole('radio');
-    const radioIngredient = radioButtons[0];
-    const radioName = radioButtons[1];
-    const radioFstLetter = radioButtons[2];
-
+    const radioIngredient = screen.getByRole('radio', { name: /ingredient/i });
+    const radioName = screen.getByRole('radio', { name: /name/i });
+    const radioFstLetter = screen.getByRole('radio', { name: /first letter/i });
     expect(radioIngredient).toBeChecked();
 
     userEvent.click(radioName);
-    userEvent.click(radioFstLetter);
 
+    userEvent.click(radioFstLetter);
+    expect(radioFstLetter).toBeChecked();
+    
   });
 })

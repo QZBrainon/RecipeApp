@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import ReceitasContext from '../hooks/ReceitasContext';
+import useNumberOfCards from '../hooks/useNumberOfCards';
 
 function RenderRecipes() {
   const history = useHistory();
   const actualPath = history.location.pathname;
   const { recipesData } = useContext(ReceitasContext);
+  const numberOfCards = useNumberOfCards();
 
   const renderCards = (recipes, recipeName, thumb) => recipes.map((recipe, index) => (
     <article
@@ -23,7 +25,6 @@ function RenderRecipes() {
   ));
 
   const getRecipesCards = (recipesKind) => {
-    const numberOfCards = 12;
     if (recipesKind === 'food') {
       const recipes = [...recipesData.foodData].slice(0, numberOfCards);
       const thumb = 'strMealThumb';

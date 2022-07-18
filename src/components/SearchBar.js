@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import ReceitasContext from '../hooks/ReceitasContext';
 
 function SearchBar() {
@@ -10,6 +11,7 @@ function SearchBar() {
   const { runSearch } = useContext(ReceitasContext);
   const [searchInfo, setSearchInfo] = useState(INITIAL_SEARCH_INFO);
   const { searchInput, radioInput } = searchInfo;
+  const history = useHistory();
 
   const handleChange = ({ target: { name, value } }) => {
     setSearchInfo({
@@ -19,12 +21,13 @@ function SearchBar() {
   };
 
   const handleClick = () => {
+    const { pathname } = history.location;
     if (radioInput === 'first letter') {
       return (searchInput.length > 1)
         ? global.alert('Your search must have only 1 (one) character')
-        : runSearch(searchInfo);
+        : runSearch(searchInfo, pathname);
     }
-    return runSearch(searchInfo);
+    return runSearch(searchInfo, pathname);
   };
 
   return (
@@ -50,6 +53,7 @@ function SearchBar() {
         <input
           type="radio"
           data-testid="ingredient-search-radio"
+          id="ingredient"
           name="radioInput"
           onChange={ handleChange }
           value="ingredient"
@@ -75,6 +79,7 @@ function SearchBar() {
       <label htmlFor="first-letter">
         <input
           type="radio"
+          id="first-letter"
           data-testid="first-letter-search-radio"
           name="radioInput"
           onChange={ handleChange }
