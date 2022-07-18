@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import ReceitasContext from '../hooks/ReceitasContext';
+import useSearch from '../hooks/useSearch';
 
 function SearchBar() {
   const INITIAL_SEARCH_INFO = {
@@ -8,7 +8,7 @@ function SearchBar() {
     radioInput: 'ingredient',
   };
 
-  const { runSearch } = useContext(ReceitasContext);
+  const { runSearch } = useSearch();
   const [searchInfo, setSearchInfo] = useState(INITIAL_SEARCH_INFO);
   const { searchInput, radioInput } = searchInfo;
   const history = useHistory();
