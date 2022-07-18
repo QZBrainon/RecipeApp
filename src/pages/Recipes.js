@@ -1,18 +1,36 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
-import underConstrucion from '../images/under_construction.svg';
 import Footer from '../components/Footer';
+import RenderRecipes from '../components/RenderRecipes';
+import ReceitasContext from '../hooks/ReceitasContext';
 
 function Recipes() {
+  const { recipesData } = useContext(ReceitasContext);
+  const [loading, setLoading] = useState(true);
+  const history = useHistory();
+  const { location: { pathname } } = history;
+  useEffect(() => {
+    const { foodData, drinksData } = recipesData;
+    if (pathname === '/foods') {
+      return setLoading(
+        (foodData.length === 0),
+      );
+    }
+    if (pathname === '/drinks') {
+      return setLoading(
+        (drinksData.length === 0),
+      );
+    }
+  }, [recipesData, pathname]);
   return (
     <div>
       <Header />
-      <img
-        src={ underConstrucion }
-        alt="site em construção..."
-        className="under_construction"
-      />
-      <h4>mulheres e homens trabalhando!</h4>
+      {
+        (loading)
+          ? <h4>loading...</h4>
+          : <RenderRecipes />
+      }
       <Footer />
     </div>
   );
