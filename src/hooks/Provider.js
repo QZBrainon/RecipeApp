@@ -21,8 +21,7 @@ function Provider({ children }) {
     const fetchData = async (endpoint) => {
       const response = await fetch(endpoint);
       const data = await response.json();
-      const dataKey = Object.keys(data);
-      const value = data[dataKey[0]];
+      const value = data.meals;
       setFoodsList([...value]);
     };
     fetchData(ENDPOINT_FOOD);
@@ -32,8 +31,7 @@ function Provider({ children }) {
     const fetchData = async (endpoint) => {
       const response = await fetch(endpoint);
       const data = await response.json();
-      const dataKey = Object.keys(data);
-      const value = data[dataKey[0]];
+      const value = data.drinks;
       setDrinksList([...value]);
     };
     fetchData(ENDPOINT_DRINK);
@@ -62,6 +60,7 @@ function Provider({ children }) {
       const NUMBER_MAX = 5;
       const response = await fetch(endpoint);
       const data = await response.json();
+      console.log(data);
       const categoryDrinksArr = [...data.drinks].slice(0, NUMBER_MAX);
       setCategoriesDrinks(categoryDrinksArr);
     };
