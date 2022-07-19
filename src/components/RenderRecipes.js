@@ -40,7 +40,6 @@ function RenderRecipes() {
       const recipes = [...recipesData.drinksData].slice(0, numberOfCards);
       const thumb = 'strDrinkThumb';
       const recipeName = 'strDrink';
-      console.log(recipes);
       if (recipes.length === 1) {
         const { idDrink: id } = recipes[0];
         return history.push(`/drinks/${id}`);
