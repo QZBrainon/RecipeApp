@@ -32,7 +32,7 @@ describe('Testes da tela geral Foods', () => {
 
     userEvent.click(radioFstLetter);
     expect(radioFstLetter).toBeChecked();
-    screen.debug();
+
   });
 
   it('2. Verifica se são renderizados 12 cards de comida na tela foods', async () => {
