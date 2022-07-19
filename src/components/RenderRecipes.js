@@ -29,6 +29,10 @@ function RenderRecipes() {
       const recipes = [...recipesData.foodData].slice(0, numberOfCards);
       const thumb = 'strMealThumb';
       const recipeName = 'strMeal';
+      if (recipes.length === 1) {
+        const { idMeal: id } = recipes[0];
+        return history.push(`/foods/${id}`);
+      }
       return renderCards(recipes, recipeName, thumb);
     }
 
@@ -36,6 +40,10 @@ function RenderRecipes() {
       const recipes = [...recipesData.drinksData].slice(0, numberOfCards);
       const thumb = 'strDrinkThumb';
       const recipeName = 'strDrink';
+      if (recipes.length === 1) {
+        const { idDrink: id } = recipes[0];
+        return history.push(`/drinks/${id}`);
+      }
       return renderCards(recipes, recipeName, thumb);
     }
   };
