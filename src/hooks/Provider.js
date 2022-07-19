@@ -13,7 +13,7 @@ function Provider({ children }) {
   const [recipesData, setRecipesData] = useState(INITIAL_STATE);
   const [foodsList, setFoodsList] = useState([]);
   const [drinksList, setDrinksList] = useState([]);
-  const [isSearchResult, setSearchResult] = useState(false);
+  const [isFilterResult, setFilterResult] = useState(false);
   const [categoriesFoods, setCategoriesFoods] = useState([]);
   const [categoriesDrinks, setCategoriesDrinks] = useState([]);
 
@@ -70,12 +70,12 @@ function Provider({ children }) {
 
   const contextValue = {
     recipesData,
-    isSearchResult,
-    setSearchResult,
+    isFilterResult,
     categoriesDrinks,
     categoriesFoods,
     setDrinksList,
     setFoodsList,
+    setFilterResult,
   };
 
   return (
