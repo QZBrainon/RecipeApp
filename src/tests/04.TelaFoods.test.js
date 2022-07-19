@@ -3,8 +3,6 @@ import { getByRole, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Recipes from '../pages/Recipes';
 import renderWithRouter from './renderWithRouter';
-import { checkPropTypes } from 'prop-types';
-import { act } from 'react-dom/test-utils';
 import MOCK_MAIN_DATA from './mocks/food_data';
 
 
