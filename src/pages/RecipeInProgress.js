@@ -10,6 +10,7 @@ function RecipeInProgress() {
         className="under_construction"
       />
       <h4>mulheres e homens trabalhando!</h4>
+      <p>E trabalhando demais...</p>
     </main>
   );
 }
