@@ -6,7 +6,7 @@ import useNumberOfCards from '../hooks/useNumberOfCards';
 function RenderRecipes({ params }) {
   const history = useHistory();
   const actualPath = history.location.pathname;
-  const { recipesData } = useContext(ReceitasContext);
+  const { recipesData, categoriesFoods, categoriesDrinks } = useContext(ReceitasContext);
   const numberOfCards = useNumberOfCards();
   console.log(params);
 
@@ -41,8 +41,24 @@ function RenderRecipes({ params }) {
     }
   };
 
+  const categoriesBtn = (array) => array.map((category, index) => (
+    <button
+      type="button"
+      key={ `${category.strCategory}_${index}` }
+      data-testid={ `${category.strCategory}-category-filter` }
+    >
+      {category.strCategory}
+    </button>
+  ));
+
   return (
     <div className="cardGrid">
+      {
+        actualPath === '/foods'
+          ? categoriesBtn(categoriesFoods)
+          : categoriesBtn(categoriesDrinks)
+      }
+
       {
         (actualPath === '/foods')
           ? getRecipesCards('food')

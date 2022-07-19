@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReceitasContext from './ReceitasContext';
-import { ENDPOINT_DRINK, ENDPOINT_FIRSTLTTER, ENDPOINT_FOOD,
-  ENDPOINT_INGREDIENT, ENDPOINT_NAME } from './endpoints';
+import { ENDPOINT_DRINK, ENDPOINT_FOOD,
+  ENDPOINT_CATEGORIES_FOODS, ENDPOINT_CATEGORIES_DRINKS } from './endpoints';
 
 function Provider({ children }) {
   const INITIAL_STATE = {
@@ -14,6 +14,8 @@ function Provider({ children }) {
   const [foodsList, setFoodsList] = useState([]);
   const [drinksList, setDrinksList] = useState([]);
   const [isSearchResult, setSearchResult] = useState(false);
+  const [categoriesFoods, setCategoriesFoods] = useState([]);
+  const [categoriesDrinks, setCategoriesDrinks] = useState([]);
 
   useEffect(() => {
     const fetchData = async (endpoint) => {
@@ -44,29 +46,36 @@ function Provider({ children }) {
     });
   }, [foodsList, drinksList]);
 
-  function runSearch({ searchInput, radioInput }, pathname) {
-    // const searchTerm = searchInput.replace(/\s/g, '%20');
-    // const letterEndpoint = ENDPOINT_FIRSTLTTER + searchTerm;
-    // const nameEndpoint = ENDPOINT_NAME + searchTerm;
-    // const ingredientEndpoint = ENDPOINT_INGREDIENT + searchTerm;
+  useEffect(() => {
+    const fetchCategoriesFoods = async (endpoint) => {
+      const NUMBER_MAX = 5;
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      const categoryFoodsArr = [...data.meals].slice(0, NUMBER_MAX);
+      setCategoriesFoods(categoryFoodsArr);
+    };
+    fetchCategoriesFoods(ENDPOINT_CATEGORIES_FOODS);
+  }, []);
 
-    // if (pathname === '/foods') {
-    //   switch (radioInput) {
-    //   case ('first letter'):
-    //     return console.log(letterEndpoint);
-    //   case ('name'):
-    //     return console.log(nameEndpoint);
-    //   default:
-    //     return console.log(ingredientEndpoint);
-    //   }
-    // }
-  }
+  useEffect(() => {
+    const fetchCategoriesDrinks = async (endpoint) => {
+      const NUMBER_MAX = 5;
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      const categoryDrinksArr = [...data.drinks].slice(0, NUMBER_MAX);
+      setCategoriesDrinks(categoryDrinksArr);
+    };
+    fetchCategoriesDrinks(ENDPOINT_CATEGORIES_DRINKS);
+  }, []);
 
   const contextValue = {
     recipesData,
-    runSearch,
     isSearchResult,
     setSearchResult,
+    categoriesDrinks,
+    categoriesFoods,
+    setDrinksList,
+    setFoodsList,
   };
 
   return (
