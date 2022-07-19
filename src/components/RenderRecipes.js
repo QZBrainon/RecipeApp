@@ -2,12 +2,31 @@ import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import ReceitasContext from '../hooks/ReceitasContext';
 import useNumberOfCards from '../hooks/useNumberOfCards';
+import useFilter from '../hooks/useFilter';
+import useOriginalData from '../hooks/useOriginalData';
 
 function RenderRecipes() {
   const history = useHistory();
   const actualPath = history.location.pathname;
-  const { recipesData, categoriesFoods, categoriesDrinks } = useContext(ReceitasContext);
+  const { recipesData,
+    categoriesFoods, categoriesDrinks,
+    setFilterResult, isFilterResult,
+    setFoodsList, setDrinksList } = useContext(ReceitasContext);
   const numberOfCards = useNumberOfCards();
+  const { runFilter } = useFilter();
+  const originalData = useOriginalData();
+
+  const handleChange = ({ target: { value } }) => {
+    setFilterResult(true);
+    runFilter(value, actualPath);
+  };
+
+  const removeAllFilter = () => {
+    setFilterResult(false);
+    const { originalDrinkList, originalFoodList } = originalData;
+    setDrinksList(originalDrinkList);
+    setFoodsList(originalFoodList);
+  };
 
   const renderCards = (recipes, recipeName, thumb) => recipes.map((recipe, index) => (
     <article
@@ -29,7 +48,7 @@ function RenderRecipes() {
       const recipes = [...recipesData.foodData].slice(0, numberOfCards);
       const thumb = 'strMealThumb';
       const recipeName = 'strMeal';
-      if (recipes.length === 1) {
+      if (recipes.length === 1 && !isFilterResult) {
         const { idMeal: id } = recipes[0];
         return history.push(`/foods/${id}`);
       }
@@ -53,6 +72,8 @@ function RenderRecipes() {
       type="button"
       key={ `${category.strCategory}_${index}` }
       data-testid={ `${category.strCategory}-category-filter` }
+      value={ category.strCategory }
+      onClick={ handleChange }
     >
       {category.strCategory}
     </button>
@@ -65,7 +86,13 @@ function RenderRecipes() {
           ? categoriesBtn(categoriesFoods)
           : categoriesBtn(categoriesDrinks)
       }
-
+      <button
+        type="button"
+        data-testid="All-category-filter"
+        onClick={ removeAllFilter }
+      >
+        All
+      </button>
       {
         (actualPath === '/foods')
           ? getRecipesCards('food')

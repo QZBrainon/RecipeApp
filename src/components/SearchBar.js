@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import ReceitasContext from '../hooks/ReceitasContext';
 import useSearch from '../hooks/useSearch';
 
 function SearchBar() {
@@ -11,6 +12,7 @@ function SearchBar() {
   const { runSearch } = useSearch();
   const [searchInfo, setSearchInfo] = useState(INITIAL_SEARCH_INFO);
   const { searchInput, radioInput } = searchInfo;
+  const { setFilterResult } = useContext(ReceitasContext);
   const history = useHistory();
 
   const handleChange = ({ target: { name, value } }) => {
@@ -22,6 +24,7 @@ function SearchBar() {
 
   const handleClick = () => {
     const { pathname } = history.location;
+    setFilterResult(false);
     if (radioInput === 'first letter') {
       return (searchInput.length > 1)
         ? global.alert('Your search must have only 1 (one) character')
