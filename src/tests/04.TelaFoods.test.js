@@ -3,17 +3,15 @@ import { getByRole, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Recipes from '../pages/Recipes';
 import renderWithRouter from './renderWithRouter';
+import getMock from './mocks/mock_function';
 import MOCK_MAIN_DATA from './mocks/food_data';
 
 
 describe('Testes da tela geral Foods', () => {
   beforeEach(() => {
-    jest.spyOn(global, 'fetch')
-      .mockImplementation(() => Promise.resolve({
-        json: () => Promise.resolve(MOCK_MAIN_DATA),
-      }));
+    getMock()
     const { history } = renderWithRouter(<Recipes />);
-    history.push('/foods');
+      history.push('/foods');
   });
 
   it('1. Verifica se é possível acessar os elementos da barra de busca.', async () => {
@@ -48,4 +46,13 @@ describe('Testes da tela geral Foods', () => {
       expect(testMealName).toBeInTheDocument();
     });
   })
+  it('4. verifica se os botões de categorias são renderizados na Tela', () => {
+    const categoriesBtn = ['Beef', 'Breakfast', 'Chicken', 'Dessert', 'Goat']
+
+    categoriesBtn.forEach((category) => {
+      
+      const btnCategories = screen.getByTestId(`${category}-category-filter`);
+      expect(btnCategories).toBeInTheDocument();
+    })
+  });
 });

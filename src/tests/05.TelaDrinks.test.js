@@ -54,4 +54,13 @@ describe('Testes da tela geral Drinks', () => {
         expect(testMealName).toBeInTheDocument();
       });
     })
+    it('4. verifica se os botões de categorias são renderizados na Tela', () => {
+      const categoriesBtn = ['Ordinary Drink', 'Cocktail', 'Shake', 'Other/Unknown', 'Cocoa']
+  
+      categoriesBtn.forEach((category) => {
+        
+        const btnCategories = screen.getByTestId(`${category}-category-filter`);
+        expect(btnCategories).toBeInTheDocument();
+      })
+    });
   })
