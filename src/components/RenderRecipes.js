@@ -3,11 +3,12 @@ import { useHistory } from 'react-router-dom';
 import ReceitasContext from '../hooks/ReceitasContext';
 import useNumberOfCards from '../hooks/useNumberOfCards';
 
-function RenderRecipes() {
+function RenderRecipes({ params }) {
   const history = useHistory();
   const actualPath = history.location.pathname;
   const { recipesData } = useContext(ReceitasContext);
   const numberOfCards = useNumberOfCards();
+  console.log(params);
 
   const renderCards = (recipes, recipeName, thumb) => recipes.map((recipe, index) => (
     <article
