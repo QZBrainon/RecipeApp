@@ -113,3 +113,7 @@ footer {
   position: fixed;
   width: 100%;
 }
+
+.imgInProgress {
+  width: 80%;
+}
