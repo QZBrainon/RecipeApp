@@ -5,17 +5,26 @@ import ReceitasContext from './ReceitasContext';
 
 function useSearch() {
   const { setFoodsList, setDrinksList } = useContext(ReceitasContext);
+  const errMsg = 'Sorry, we haven\'t found any recipes for these filters.';
 
   const fetchData = async (endpoint, pathname) => {
-    const response = await fetch(endpoint);
-    const data = await response.json();
-    const dataKey = Object.keys(data);
-    const value = data[dataKey[0]];
-    if (pathname === '/foods') {
-      setFoodsList([...value]);
-    }
-    if (pathname === '/drinks') {
-      setDrinksList([...value]);
+    try {
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      const dataKey = Object.keys(data);
+      const value = data[dataKey[0]];
+      if (data[dataKey[0]] === null) {
+        return global.alert(errMsg);
+      }
+      if (pathname === '/foods') {
+        setFoodsList([...value]);
+      }
+      if (pathname === '/drinks') {
+        setDrinksList([...value]);
+      }
+    } catch (error) {
+      console.log(error);
+      return global.alert(errMsg);
     }
   };
 

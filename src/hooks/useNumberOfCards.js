@@ -1,11 +1,12 @@
-import { useContext } from 'react';
-import ReceitasContext from './ReceitasContext';
+// import { useContext } from 'react';
+// import ReceitasContext from './ReceitasContext';
 
 function useNumberOfCards() {
-  const { isSearchResult } = useContext(ReceitasContext);
-  const five = 5;
+  // const { isFilterResult } = useContext(ReceitasContext);
+  // const five = 5;
   const twelve = 12;
-  return (isSearchResult) ? five : twelve;
+  // return (isFilterResult) ? five : twelve;
+  return twelve;
 }
 
 export default useNumberOfCards;
