@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import ReceitasContext from '../hooks/ReceitasContext';
 import useNumberOfCards from '../hooks/useNumberOfCards';
 import useFilter from '../hooks/useFilter';
+import useCards from '../hooks/useCards';
 import useOriginalData from '../hooks/useOriginalData';
 
 function RenderRecipes() {
@@ -15,48 +16,26 @@ function RenderRecipes() {
   const numberOfCards = useNumberOfCards();
   const { runFilter } = useFilter();
   const originalData = useOriginalData();
+  const { renderCards } = useCards();
 
-  const handleChange = ({ target: { value } }) => {
-    setFilterResult(true);
-    runFilter(value, actualPath);
-  };
+  const [activeFilter, setActiveFilter] = useState('');
 
   const removeAllFilter = () => {
     setFilterResult(false);
+    setActiveFilter('');
     const { originalDrinkList, originalFoodList } = originalData;
     setDrinksList(originalDrinkList);
     setFoodsList(originalFoodList);
   };
 
-  const getId = (recipe) => {
-    if (actualPath === '/foods') {
-      const { idMeal } = recipe;
-      return `/foods/${idMeal}`;
+  const handleChange = ({ target: { value } }) => {
+    if (activeFilter === value) {
+      return removeAllFilter();
     }
-    if (actualPath === '/drinks') {
-      const { idDrink } = recipe;
-      return `/drinks/${idDrink}`;
-    }
+    setFilterResult(true);
+    setActiveFilter(value);
+    return runFilter(value, actualPath);
   };
-
-  const renderCards = (recipes, recipeName, thumb) => recipes.map((recipe, index) => {
-    const id = getId(recipe);
-    return (
-      <Link to={ id } key={ `${recipe}_${index}` } className="linkCard">
-        <article
-          data-testid={ `${index}-recipe-card` }
-          className="recipeCard"
-        >
-          <img
-            data-testid={ `${index}-card-img` }
-            src={ recipe[thumb] }
-            alt={ `thumb of ${recipe[recipeName]}` }
-          />
-          <h3 data-testid={ `${index}-card-name` }>{ recipe[recipeName] }</h3>
-        </article>
-      </Link>
-    );
-  });
 
   const getRecipesCards = (recipesKind) => {
     if (recipesKind === 'food') {
