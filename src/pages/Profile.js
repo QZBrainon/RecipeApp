@@ -8,6 +8,14 @@ function Profile() {
   const userEmail = JSON.parse(user);
   const history = useHistory();
 
+  const defaultEmail = () => {
+    if (userEmail === null) {
+      return 'você não logou';
+    }
+    const { email } = userEmail;
+    return email;
+  };
+
   const logoutHandleClick = () => {
     localStorage.clear();
     history.push('/');
@@ -16,7 +24,7 @@ function Profile() {
   return (
     <main>
       <Header />
-      <h1 data-testid="profile-email">{ userEmail.email }</h1>
+      <h1 data-testid="profile-email">{ defaultEmail() }</h1>
       <button
         type="button"
         data-testid="profile-done-btn"
