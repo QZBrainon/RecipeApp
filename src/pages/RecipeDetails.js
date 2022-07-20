@@ -1,15 +1,16 @@
 import React from 'react';
-import underConstrucion from '../images/under_construction.svg';
+import useActualPath from '../hooks/useActualPath';
+import useDetails from '../hooks/useDetails';
 
 function RecipeDetails() {
+  const actualpath = useActualPath();
+  useDetails(actualpath);
+
   return (
     <main>
-      <img
-        src={ underConstrucion }
-        alt="site em construção..."
-        className="under_construction"
-      />
-      <h4>mulheres e homens trabalhando!</h4>
+      <h1>
+        { actualpath }
+      </h1>
     </main>
   );
 }

@@ -21,3 +21,7 @@ export const ENDPOINT_CATEGORIES_DRINKS = 'https://www.thecocktaildb.com/api/jso
 export const ENDPOINT_FILTERCATEGORY_FOODS = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
 
 export const ENDPOINT_FILTERCATEGORY_DRINKS = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=';
+
+export const ENDPOINT_DETAIL_FOOD = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
+
+export const ENDPOINT_DETAIL_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';

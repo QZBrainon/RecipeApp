@@ -8,6 +8,7 @@ function Provider({ children }) {
   const INITIAL_STATE = {
     foodData: [],
     drinksData: [],
+    recipeInDetail: {},
   };
 
   const [recipesData, setRecipesData] = useState(INITIAL_STATE);
@@ -16,6 +17,7 @@ function Provider({ children }) {
   const [isFilterResult, setFilterResult] = useState(false);
   const [categoriesFoods, setCategoriesFoods] = useState([]);
   const [categoriesDrinks, setCategoriesDrinks] = useState([]);
+  const [recipeDetail, setRecipeDetail] = useState({});
 
   useEffect(() => {
     const fetchData = async (endpoint) => {
@@ -41,8 +43,9 @@ function Provider({ children }) {
     setRecipesData({
       foodData: foodsList,
       drinksData: drinksList,
+      recipeInDetail: recipeDetail,
     });
-  }, [foodsList, drinksList]);
+  }, [foodsList, drinksList, recipeDetail]);
 
   useEffect(() => {
     const fetchCategoriesFoods = async (endpoint) => {
@@ -60,7 +63,6 @@ function Provider({ children }) {
       const NUMBER_MAX = 5;
       const response = await fetch(endpoint);
       const data = await response.json();
-      console.log(data);
       const categoryDrinksArr = [...data.drinks].slice(0, NUMBER_MAX);
       setCategoriesDrinks(categoryDrinksArr);
     };
@@ -72,9 +74,11 @@ function Provider({ children }) {
     isFilterResult,
     categoriesDrinks,
     categoriesFoods,
+    recipeDetail,
     setDrinksList,
     setFoodsList,
     setFilterResult,
+    setRecipeDetail,
   };
 
   return (
