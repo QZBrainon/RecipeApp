@@ -1,9 +1,12 @@
 import { useContext, useEffect } from 'react';
+import { useRouteMatch } from 'react-router-dom';
 import { ENDPOINT_DETAIL_DRINK, ENDPOINT_DETAIL_FOOD } from './endpoints';
 import ReceitasContext from './ReceitasContext';
 
 function useDetails(actualPath) {
   const { setRecipeDetail } = useContext(ReceitasContext);
+  const match = useRouteMatch();
+  const { params: { id } } = match;
 
   useEffect(() => {
     const fetchDetails = async (endpoint, key) => {
@@ -12,25 +15,21 @@ function useDetails(actualPath) {
       const recipe = data[key][0];
       setRecipeDetail(recipe);
     };
-
     if (actualPath.includes('foods')) {
-      const removeFoods = 7;
-      const id = actualPath.slice(removeFoods);
       const endpoint = ENDPOINT_DETAIL_FOOD + id;
       const key = 'meals';
       return fetchDetails(endpoint, key);
     }
 
     if (actualPath.includes('drinks')) {
-      const removeDrinks = 8;
-      const id = actualPath.slice(removeDrinks);
       const endpoint = ENDPOINT_DETAIL_DRINK + id;
       const key = 'drinks';
       return fetchDetails(endpoint, key);
     }
 
     return console.log('erro');
-  }, [actualPath, setRecipeDetail]);
+  }, [actualPath, id, setRecipeDetail]);
+
 }
 
 export default useDetails;
