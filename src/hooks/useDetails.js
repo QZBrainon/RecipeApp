@@ -29,6 +29,7 @@ function useDetails(actualPath) {
 
     return console.log('erro');
   }, [actualPath, id, setRecipeDetail]);
+
 }
 
 export default useDetails;
