@@ -1,10 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import clipboardCopy from 'clipboard-copy';
 import ReceitasContext from './ReceitasContext';
 import useActualPath from './useActualPath';
-import shareIcon from '../images/shareIcon.svg';
+import useCopyToClipBoard from './useCopyToClipboard';
+import useFavoriteButton from './useFavoriteButton';
 
-function useProgressInfo(checkedItens, setCheckedItems) {
+function useProgressInfo(inProgressState) {
+  const { checkedItens, setCheckedItems, isFavorite, setFavorite } = inProgressState;
+  const [isLinkInClipBoard, setLinkInClipBoard] = useState(false);
+
   const { recipesData: { recipeInDetail } } = useContext(ReceitasContext);
+  const { toggleClipboardMessage } = useCopyToClipBoard(isLinkInClipBoard);
+  const { getFavoriteButton, setStorageFavorite } = useFavoriteButton();
   const actualPath = useActualPath();
 
   const handleChange = ({ target: { name } }) => {
@@ -18,6 +25,12 @@ function useProgressInfo(checkedItens, setCheckedItems) {
     return setCheckedItems(refreshCheckedItens);
   };
 
+  const toggleFavorite = () => {
+    console.log(recipeInDetail);
+    setStorageFavorite();
+    setFavorite(!isFavorite);
+  };
+
   const getStyle = (ingredient) => {
     const style = {
       textDecoration: 'line-through',
@@ -25,6 +38,17 @@ function useProgressInfo(checkedItens, setCheckedItems) {
     if (checkedItens.includes(ingredient)) {
       return style;
     }
+  };
+
+  const shareClick = () => {
+    const url = window.location.href;
+    if (url.includes('in-progress')) {
+      const newUrl = url.replace('/in-progress', '');
+      clipboardCopy(newUrl);
+      return setLinkInClipBoard(!isLinkInClipBoard);
+    }
+    clipboardCopy(url);
+    return setLinkInClipBoard(!isLinkInClipBoard);
   };
 
   const getIngredientsList = () => {
@@ -68,11 +92,11 @@ function useProgressInfo(checkedItens, setCheckedItems) {
         <h1 data-testid="recipe-title">
           {title}
         </h1>
-        <button type="button" data-testid="share-btn">
-          <img src={ shareIcon } alt="compartilhar" />
+        <button type="button" data-testid="share-btn" onClick={ shareClick }>
+          { toggleClipboardMessage() }
         </button>
-        <button type="button" data-testid="favorite-btn">
-          Favoritar
+        <button type="button" data-testid="favorite-btn" onClick={ toggleFavorite }>
+          { getFavoriteButton(isFavorite) }
         </button>
         <h4 data-testid="recipe-category">
           Categoria:
@@ -92,24 +116,20 @@ function useProgressInfo(checkedItens, setCheckedItems) {
 
   function getProgressInfo() {
     if (actualPath.includes('foods')) {
-      const { strMealThumb: thumb, strMeal: title,
-        strCategory: category, strInstructions: instructions } = recipeInDetail;
       const itemProfile = {
-        thumb,
-        title,
-        category,
-        instructions,
+        thumb: recipeInDetail.strMealThumb,
+        title: recipeInDetail.strMeal,
+        category: recipeInDetail.strCategory,
+        instructions: recipeInDetail.strInstructions,
       };
       return renderInfo(itemProfile);
     }
     if (actualPath.includes('drinks')) {
-      const { strDrinkThumb: thumb, strDrink: title,
-        strAlcoholic: category, strInstructions: instructions } = recipeInDetail;
       const itemProfile = {
-        thumb,
-        title,
-        category,
-        instructions,
+        thumb: recipeInDetail.strDrinkThumb,
+        title: recipeInDetail.strDrink,
+        category: recipeInDetail.strAlcoholic,
+        instructions: recipeInDetail.instructions,
       };
       return renderInfo(itemProfile);
     }
