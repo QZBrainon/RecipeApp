@@ -22,10 +22,7 @@ function Login() {
     localStorage.setItem('user', userEmail);
     localStorage.setItem('mealsToken', '1');
     localStorage.setItem('cocktailsToken', '1');
-    const storageTest = localStorage.getItem('inProgressRecipes');
-    const initialProgress = JSON.stringify([]);
     history.push('/foods');
-    return (!storageTest) && localStorage.setItem('inProgressRecipes', initialProgress);
   };
 
   const verifyConditions = () => {
