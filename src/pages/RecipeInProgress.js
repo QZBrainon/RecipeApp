@@ -12,7 +12,7 @@ const INITIAL_PROGRESS_DATA = {
 function RecipeInProgress() {
   const [inProgressData, setInProgressData] = useState(INITIAL_PROGRESS_DATA);
   const [checkedItens, setCheckedItems] = useState([]);
-  const [isFavorite, setFavorite] = useState(false);
+  const [isFavorite, setFavorite] = useState();
 
   const actualPath = useActualPath();
   useDetails(actualPath);
@@ -41,12 +41,17 @@ function RecipeInProgress() {
     const favoriteRecipes = localStorage.getItem('favoriteRecipes');
     if (!favoriteRecipes) {
       const voidFavRecipes = JSON.stringify([]);
+      setFavorite(false);
       return localStorage.setItem('favoriteRecipes', voidFavRecipes);
     }
-  }, []);
+    const favoriteData = JSON.parse(favoriteRecipes);
+    if (favoriteData.some((item) => item.id === id)) {
+      return setFavorite(true);
+    }
+    return setFavorite(false);
+  }, [id]);
 
   useEffect(() => {
-    // const storageTest = localStorage.getItem('inProgressRecipes');
     const inProgress = localStorage.getItem('inProgressRecipes');
     if (inProgress === null) {
       const initialProgress = JSON.stringify([]);

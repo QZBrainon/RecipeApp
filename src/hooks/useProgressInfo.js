@@ -1,18 +1,29 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import clipboardCopy from 'clipboard-copy';
+import { useHistory } from 'react-router-dom';
 import ReceitasContext from './ReceitasContext';
 import useActualPath from './useActualPath';
 import useCopyToClipBoard from './useCopyToClipboard';
 import useFavoriteButton from './useFavoriteButton';
+import useTotalIngredients from './useTotalIngredients';
 
 function useProgressInfo(inProgressState) {
   const { checkedItens, setCheckedItems, isFavorite, setFavorite } = inProgressState;
   const [isLinkInClipBoard, setLinkInClipBoard] = useState(false);
-
+  const [thereIngredientsToCheck, setThereIngredientsToCheck] = useState(true);
   const { recipesData: { recipeInDetail } } = useContext(ReceitasContext);
   const { toggleClipboardMessage } = useCopyToClipBoard(isLinkInClipBoard);
-  const { getFavoriteButton, setStorageFavorite } = useFavoriteButton();
+  const { getFavoriteButton,
+    setStorageFavorite,
+    sackStorageFavorite } = useFavoriteButton();
   const actualPath = useActualPath();
+  const totalIngredient = useTotalIngredients();
+  const history = useHistory();
+
+  useEffect(() => {
+    const test = totalIngredient - checkedItens.length;
+    return setThereIngredientsToCheck(test > 0);
+  }, [checkedItens, totalIngredient]);
 
   const handleChange = ({ target: { name } }) => {
     if (checkedItens.includes(name)) {
@@ -26,9 +37,14 @@ function useProgressInfo(inProgressState) {
   };
 
   const toggleFavorite = () => {
-    console.log(recipeInDetail);
-    setStorageFavorite();
-    setFavorite(!isFavorite);
+    if (isFavorite !== true) {
+      setStorageFavorite(actualPath, setFavorite);
+      setFavorite(true);
+    }
+    if (isFavorite === true) {
+      sackStorageFavorite(setFavorite);
+      setFavorite(false);
+    }
   };
 
   const getStyle = (ingredient) => {
@@ -107,7 +123,12 @@ function useProgressInfo(inProgressState) {
           { getIngredients() }
         </ul>
         <p data-testid="instructions">{instructions}</p>
-        <button type="button" data-testid="finish-recipe-btn">
+        <button
+          type="button"
+          data-testid="finish-recipe-btn"
+          disabled={ thereIngredientsToCheck }
+          onClick={ () => history.push('/done-recipes') }
+        >
           Finalizar
         </button>
       </>
@@ -129,7 +150,7 @@ function useProgressInfo(inProgressState) {
         thumb: recipeInDetail.strDrinkThumb,
         title: recipeInDetail.strDrink,
         category: recipeInDetail.strAlcoholic,
-        instructions: recipeInDetail.instructions,
+        instructions: recipeInDetail.strInstructions,
       };
       return renderInfo(itemProfile);
     }

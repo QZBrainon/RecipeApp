@@ -1,31 +1,26 @@
 import React from 'react';
 import {  screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import RecipeDetails from '../pages/RecipeDetails';
-import Recipes from '../pages/Recipes';
 import renderWithRouter from './renderWithRouter';
-import getMock from './mocks/mock_function';
+import App from '../App';
 
 describe('Teste da Tela RecipeDetails', () => {
     beforeEach(() => {
-        
-        getMock();
-        const { history } = renderWithRouter(<RecipeDetails/>);
-        
-        history.push('/foods/52804');
-        const cardPotine = screen.findByTestId('5-card-name');
-        userEvent.click(cardPotine);
-        
+       // getMock();
+        const { history } = renderWithRouter(<App/>);
+        history.push('/foods');
     });
 
-    it('01. se aparece os elementos da receita na tela',  async () =>{
-        const headerText = screen.getByTestId('recipe-title');
-        const photoRecipe = screen.getByTestId('recipe-photo');
-        const categoryRecipe = screen.getByTestId('recipe-category');
-        const instructionsRecipe = screen.getByTestId('instructions');
-        const video = screen.getByTestId('video');
+    it('01. se aparece os elementos da receita na tela', async () => {
+        
+        userEvent.click(await screen.findByTestId('0-card-img'))
+        
 
-        await history.push('/foods/52804');
+       const headerText = await screen.findByTestId('recipe-title');
+        const photoRecipe = await screen.findByTestId('recipe-photo');
+        const categoryRecipe = await screen.findByTestId('recipe-category');
+        const instructionsRecipe = await screen.findByTestId('instructions');
+        const video = await screen.findByTestId('video');
 
         expect(headerText).toBeInTheDocument();
         expect(photoRecipe).toBeInTheDocument();
@@ -33,12 +28,32 @@ describe('Teste da Tela RecipeDetails', () => {
         expect(instructionsRecipe).toBeInTheDocument();
         expect(video).toBeInTheDocument();
 
-        const arrayOfIngredients = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19']
+   });
 
-        arrayOfIngredients.forEach((numb) => {
-            const pIngredients = screen.getByTestId(`${numb}-ingredient-name-and-measure`)
-            expect(pIngredients).toHaveLength(19);
-        })
+    it('02. se aparece os cards recomendados', async () => {
+
+     userEvent.click(await screen.findByTestId('0-card-img'));
+
+      const arrayNumb = ['0', '1', '2', '3', '4',
+         '5', '6', '7', '8', '9', '10', '11', '12', 
+         '13', '14', '15', '16', '17', '18', '19','20',
+          '21', '22', '23', '24'
+        ];
+    
+        const arrayNames = ['GG','A1', 'ABC', 'Kir', '747', '252','Ace',
+        'Adam', 'B-53', 'AT&T', 'ACID',  'B-52', 'H.D.', 'Smut','Rose',
+         'A.J.','Derby', 'Karsk', 'Melya', '50/50', 'Zorro', 'Bijou', 'Affair', 'Boxcar', 'Orgasm'
+        ];
+    
+      arrayNumb.forEach(async (numb)  => {
+            const recomendationCard = await screen.findByTestId(`${numb}-recomendation-card`);
+            expect(recomendationCard).toBeInTheDocument();
+        });
+
+        arrayNames.forEach(async (names) => {
+            const nameRecomendation = await screen.findByRole('paragraph', { name: `${names}`});
+            expect(nameRecomendation).toBeInTheDocument();
+        });
     });
 
 });
