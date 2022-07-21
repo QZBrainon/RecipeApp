@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Login from './pages/Login';
 import Recipes from './pages/Recipes';
 import Profile from './pages/Profile';
@@ -8,13 +8,14 @@ import DoneRecipes from './pages/DoneRecipes';
 import FavoriteRecipes from './pages/FavoriteRecipes';
 import RecipeDetails from './pages/RecipeDetails';
 import RecipeInProgress from './pages/RecipeInProgress';
+import Provider from './hooks/Provider';
 // import rockGlass from './images/rockGlass.svg';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <div>
-      <Router>
+      <Provider>
         <Switch>
           <Route exact path="/" component={ Login } />
           <Route exact path="/foods" component={ Recipes } />
@@ -35,7 +36,7 @@ function App() {
           <Route path="/done-recipes" component={ DoneRecipes } />
           <Route path="/favorite-recipes" component={ FavoriteRecipes } />
         </Switch>
-      </Router>
+      </Provider>
     </div>
     // <div className="meals">
     //   <span className="logo">TRYBE</span>

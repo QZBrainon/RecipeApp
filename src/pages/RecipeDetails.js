@@ -14,8 +14,6 @@ function RecipeDetails() {
     recipesData,
   } = useContext(ReceitasContext);
 
-  console.log(recipesData);
-
   const objLength = Object.keys(recipeInDetail).length;
 
   const generateIngredients = () => {
@@ -41,8 +39,6 @@ function RecipeDetails() {
       ))
     );
   };
-
-  console.log(recipeInDetail);
 
   const itemTitle = actualpath.includes('food')
     ? recipeInDetail.strMeal : recipeInDetail.strDrink;

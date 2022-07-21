@@ -12,7 +12,6 @@ function useDetails(actualPath) {
     const fetchDetails = async (endpoint, key) => {
       const response = await fetch(endpoint);
       const data = await response.json();
-      console.log(data);
       const recipe = data[key][0];
       setRecipeDetail(recipe);
     };
@@ -30,7 +29,6 @@ function useDetails(actualPath) {
 
     return console.log('erro');
   }, [actualPath, id, setRecipeDetail]);
-
 }
 
 export default useDetails;
