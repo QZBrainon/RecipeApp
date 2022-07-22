@@ -90,6 +90,7 @@ function RecipeDetails() {
             data-testid={ `${index}-recomendation-card` }
             className="recomendCard"
           >
+            {console.log('entrou no return')}
             <img src={ item.strMealThumb } alt="thumbnail" />
             <p
               key={ item.idMeal }
