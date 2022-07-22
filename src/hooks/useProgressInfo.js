@@ -6,6 +6,7 @@ import useActualPath from './useActualPath';
 import useCopyToClipBoard from './useCopyToClipboard';
 import useFavoriteButton from './useFavoriteButton';
 import useTotalIngredients from './useTotalIngredients';
+import useStoreDoneRecipes from './useStoreDoneRecipes';
 
 function useProgressInfo(inProgressState) {
   const { checkedItens, setCheckedItems, isFavorite, setFavorite } = inProgressState;
@@ -14,6 +15,7 @@ function useProgressInfo(inProgressState) {
   const { recipesData: { recipeInDetail } } = useContext(ReceitasContext);
   const { toggleClipboardMessage } = useCopyToClipBoard(isLinkInClipBoard);
   const { getFavoriteButton } = useFavoriteButton();
+  const { storeDoneRecipes } = useStoreDoneRecipes();
   const actualPath = useActualPath();
   const totalIngredient = useTotalIngredients();
   const history = useHistory();
@@ -22,6 +24,11 @@ function useProgressInfo(inProgressState) {
     const test = totalIngredient - checkedItens.length;
     return setThereIngredientsToCheck(test > 0);
   }, [checkedItens, totalIngredient]);
+
+  const finalizeRecipe = () => {
+    storeDoneRecipes();
+    history.push('/done-recipes');
+  };
 
   const handleChange = ({ target: { name } }) => {
     if (checkedItens.includes(name)) {
@@ -114,7 +121,7 @@ function useProgressInfo(inProgressState) {
           type="button"
           data-testid="finish-recipe-btn"
           disabled={ thereIngredientsToCheck }
-          onClick={ () => history.push('/done-recipes') }
+          onClick={ finalizeRecipe }
         >
           Finalizar
         </button>
