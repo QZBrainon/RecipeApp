@@ -50,10 +50,41 @@ describe('Teste da Tela RecipeDetails', () => {
             expect(recomendationCard).toBeInTheDocument();
         });
 
-        arrayNames.forEach(async (names) => {
+      /*  arrayNames.forEach(async (names) => {
             const nameRecomendation = await screen.findByRole('paragraph', { name: `${names}`});
             expect(nameRecomendation).toBeInTheDocument();
-        });
+        }); */
     });
+    it('04. testando a pag de  "/drinks"' , async () => { 
+        const { history } = renderWithRouter(<App/>);
+        history.push('/drinks');
+
+        userEvent.click(await screen.findByTestId('0-card-img'))
+        
+
+        const headerText = await screen.findByTestId('recipe-title');
+         const photoRecipe = await screen.findByTestId('recipe-photo');
+         const categoryRecipe = await screen.findByTestId('recipe-category');
+         const instructionsRecipe = await screen.findByTestId('instructions');
+         const video = await screen.findByTestId('video');
+ 
+         expect(headerText).toBeInTheDocument();
+         expect(photoRecipe).toBeInTheDocument();
+         expect(categoryRecipe).toBeInTheDocument();
+         expect(instructionsRecipe).toBeInTheDocument();
+         expect(video).toBeInTheDocument();
+
+
+         userEvent.click(await screen.findByTestId('0-card-img'));
+
+      const arrayNumb = ['0', '1', '2', '3', '4','5'];
+
+
+      arrayNumb.forEach(async (numb)  => {
+        const recomendationCard = await screen.findByTestId(`${numb}-recomendation-card`);
+        expect(recomendationCard).toBeInTheDocument();
+    });
+
+    })
 
 });
