@@ -18,6 +18,7 @@ function Provider({ children }) {
   const [categoriesFoods, setCategoriesFoods] = useState([]);
   const [categoriesDrinks, setCategoriesDrinks] = useState([]);
   const [recipeDetail, setRecipeDetail] = useState({});
+  const [doneRecipesData, setDoneRecipes] = useState([]);
 
   useEffect(() => {
     const fetchData = async (endpoint) => {
@@ -44,8 +45,9 @@ function Provider({ children }) {
       foodData: foodsList,
       drinksData: drinksList,
       recipeInDetail: recipeDetail,
+      doneRecipes: doneRecipesData,
     });
-  }, [foodsList, drinksList, recipeDetail]);
+  }, [foodsList, drinksList, recipeDetail, doneRecipesData]);
 
   useEffect(() => {
     const fetchCategoriesFoods = async (endpoint) => {
@@ -79,6 +81,7 @@ function Provider({ children }) {
     setFoodsList,
     setFilterResult,
     setRecipeDetail,
+    setDoneRecipes,
   };
 
   return (

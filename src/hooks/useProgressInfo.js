@@ -6,6 +6,7 @@ import useActualPath from './useActualPath';
 import useCopyToClipBoard from './useCopyToClipboard';
 import useFavoriteButton from './useFavoriteButton';
 import useTotalIngredients from './useTotalIngredients';
+import useStoreDoneRecipes from './useStoreDoneRecipes';
 
 function useProgressInfo(inProgressState) {
   const { checkedItens, setCheckedItems, isFavorite, setFavorite } = inProgressState;
@@ -13,9 +14,8 @@ function useProgressInfo(inProgressState) {
   const [thereIngredientsToCheck, setThereIngredientsToCheck] = useState(true);
   const { recipesData: { recipeInDetail } } = useContext(ReceitasContext);
   const { toggleClipboardMessage } = useCopyToClipBoard(isLinkInClipBoard);
-  const { getFavoriteButton,
-    setStorageFavorite,
-    sackStorageFavorite } = useFavoriteButton();
+  const { getFavoriteButton } = useFavoriteButton();
+  const { storeDoneRecipes } = useStoreDoneRecipes();
   const actualPath = useActualPath();
   const totalIngredient = useTotalIngredients();
   const history = useHistory();
@@ -24,6 +24,11 @@ function useProgressInfo(inProgressState) {
     const test = totalIngredient - checkedItens.length;
     return setThereIngredientsToCheck(test > 0);
   }, [checkedItens, totalIngredient]);
+
+  const finalizeRecipe = () => {
+    storeDoneRecipes();
+    history.push('/done-recipes');
+  };
 
   const handleChange = ({ target: { name } }) => {
     if (checkedItens.includes(name)) {
@@ -34,17 +39,6 @@ function useProgressInfo(inProgressState) {
     }
     const refreshCheckedItens = [...checkedItens, name];
     return setCheckedItems(refreshCheckedItens);
-  };
-
-  const toggleFavorite = () => {
-    if (isFavorite !== true) {
-      setStorageFavorite(actualPath, setFavorite);
-      setFavorite(true);
-    }
-    if (isFavorite === true) {
-      sackStorageFavorite(setFavorite);
-      setFavorite(false);
-    }
   };
 
   const getStyle = (ingredient) => {
@@ -84,13 +78,16 @@ function useProgressInfo(inProgressState) {
         key={ `${ingredient}_${index}` }
         style={ getStyle(ingredient) }
       >
-        <input
-          type="checkbox"
-          name={ ingredient }
-          onChange={ handleChange }
-          checked={ (checkedItens.includes(ingredient)) }
-        />
-        {ingredient}
+        <label htmlFor={ `ingredient_${index}` }>
+          <input
+            type="checkbox"
+            id={ `ingredient_${index}` }
+            name={ `${ingredient}_${index}` }
+            onChange={ handleChange }
+            checked={ (checkedItens.includes(`${ingredient}_${index}`)) }
+          />
+          {ingredient}
+        </label>
       </li>
     ));
   };
@@ -111,9 +108,9 @@ function useProgressInfo(inProgressState) {
         <button type="button" data-testid="share-btn" onClick={ shareClick }>
           { toggleClipboardMessage() }
         </button>
-        <button type="button" data-testid="favorite-btn" onClick={ toggleFavorite }>
-          { getFavoriteButton(isFavorite) }
-        </button>
+
+        { getFavoriteButton(isFavorite, setFavorite) }
+
         <h4 data-testid="recipe-category">
           Categoria:
           {' '}
@@ -127,7 +124,7 @@ function useProgressInfo(inProgressState) {
           type="button"
           data-testid="finish-recipe-btn"
           disabled={ thereIngredientsToCheck }
-          onClick={ () => history.push('/done-recipes') }
+          onClick={ finalizeRecipe }
         >
           Finalizar
         </button>
