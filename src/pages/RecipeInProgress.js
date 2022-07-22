@@ -36,9 +36,8 @@ function RecipeInProgress() {
       isFavorite,
     });
   }, [checkedItens, id, isFavorite]);
-console.log('fora useEffect');
+
   useEffect(() => {
-    console.log('useEffect');
     const favoriteRecipes = localStorage.getItem('favoriteRecipes');
     if (!favoriteRecipes) {
       const voidFavRecipes = JSON.stringify([]);
@@ -46,9 +45,7 @@ console.log('fora useEffect');
       return localStorage.setItem('favoriteRecipes', voidFavRecipes);
     }
     const favoriteData = JSON.parse(favoriteRecipes);
-    console.log('fora do if');
     if (favoriteData.some((item) => item.id === id)) {
-      console.log('dentro do if');
       return setFavorite(true);
     }
     return setFavorite(false);
