@@ -3,10 +3,12 @@ import { useRouteMatch } from 'react-router-dom';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import ReceitasContext from './ReceitasContext';
+import useActualPath from './useActualPath';
 
 function useFavoriteButton() {
   const { recipesData: { recipeInDetail } } = useContext(ReceitasContext);
   const { params: { id } } = useRouteMatch();
+  const actualPath = useActualPath();
 
   function sackStorageFavorite() {
     const favItens = JSON.parse(localStorage.getItem('favoriteRecipes'));
@@ -25,7 +27,7 @@ function useFavoriteButton() {
         type: 'food',
         nationality: recipeInDetail.strArea,
         category: recipeInDetail.strCategory,
-        alcooholicOrNot: '',
+        alcoholicOrNot: '',
         name: recipeInDetail.strMeal,
         image: recipeInDetail.strMealThumb,
       };
@@ -35,8 +37,8 @@ function useFavoriteButton() {
         id: recipeInDetail.idDrink,
         type: 'drink',
         nationality: '',
-        category: '',
-        alcooholicOrNot: recipeInDetail.strAlcoholic,
+        category: recipeInDetail.strCategory,
+        alcoholicOrNot: recipeInDetail.strAlcoholic,
         name: recipeInDetail.strDrink,
         image: recipeInDetail.strDrinkThumb,
       };
@@ -49,11 +51,44 @@ function useFavoriteButton() {
     }
   }
 
-  function getFavoriteButton(isFavorite) {
+  const toggleFavorite = (isFavorite, setFavorite) => {
+    if (isFavorite !== true) {
+      setStorageFavorite(actualPath);
+      setFavorite(true);
+    }
+    if (isFavorite === true) {
+      sackStorageFavorite();
+      setFavorite(false);
+    }
+  };
+
+  function getFavoriteButton(isFavorite, setFavorite) {
     return (
       (isFavorite)
-        ? <img src={ blackHeartIcon } alt="favorite icon" />
-        : <img src={ whiteHeartIcon } alt="non-favorite icon" />
+        ? (
+          <button
+            type="button"
+            onClick={ () => toggleFavorite(isFavorite, setFavorite) }
+          >
+            <img
+              src={ blackHeartIcon }
+              data-testid="favorite-btn"
+              alt="favorite icon"
+            />
+          </button>
+        )
+        : (
+          <button
+            type="button"
+            onClick={ () => toggleFavorite(isFavorite, setFavorite) }
+          >
+            <img
+              src={ whiteHeartIcon }
+              data-testid="favorite-btn"
+              alt="non-favorite icon"
+            />
+          </button>
+        )
     );
   }
 

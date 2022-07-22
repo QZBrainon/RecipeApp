@@ -13,9 +13,7 @@ function useProgressInfo(inProgressState) {
   const [thereIngredientsToCheck, setThereIngredientsToCheck] = useState(true);
   const { recipesData: { recipeInDetail } } = useContext(ReceitasContext);
   const { toggleClipboardMessage } = useCopyToClipBoard(isLinkInClipBoard);
-  const { getFavoriteButton,
-    setStorageFavorite,
-    sackStorageFavorite } = useFavoriteButton();
+  const { getFavoriteButton } = useFavoriteButton();
   const actualPath = useActualPath();
   const totalIngredient = useTotalIngredients();
   const history = useHistory();
@@ -34,17 +32,6 @@ function useProgressInfo(inProgressState) {
     }
     const refreshCheckedItens = [...checkedItens, name];
     return setCheckedItems(refreshCheckedItens);
-  };
-
-  const toggleFavorite = () => {
-    if (isFavorite !== true) {
-      setStorageFavorite(actualPath, setFavorite);
-      setFavorite(true);
-    }
-    if (isFavorite === true) {
-      sackStorageFavorite(setFavorite);
-      setFavorite(false);
-    }
   };
 
   const getStyle = (ingredient) => {
@@ -111,9 +98,9 @@ function useProgressInfo(inProgressState) {
         <button type="button" data-testid="share-btn" onClick={ shareClick }>
           { toggleClipboardMessage() }
         </button>
-        <button type="button" data-testid="favorite-btn" onClick={ toggleFavorite }>
-          { getFavoriteButton(isFavorite) }
-        </button>
+
+        { getFavoriteButton(isFavorite, setFavorite) }
+
         <h4 data-testid="recipe-category">
           Categoria:
           {' '}
