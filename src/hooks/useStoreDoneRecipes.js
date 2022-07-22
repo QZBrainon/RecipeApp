@@ -5,34 +5,61 @@ import useActualPath from './useActualPath';
 function useStoreDoneRecipes() {
   const { recipesData: { recipeInDetail } } = useContext(ReceitasContext);
   const actualPath = useActualPath();
-  const date = new Date();
+
+  const getDate = () => {
+    const d = new Date();
+    const date = d.getDate().toString();
+    let month = d.getMonth().toString();
+    const year = d.getFullYear().toString();
+
+    if (month.length === 1) {
+      const zero = '0';
+      month = zero.concat(month);
+    }
+
+    console.log(`${date}/${month}/${year}`);
+    return (`${date}/${month}/${year}`);
+  };
+
+  const getTagArray = (tags) => {
+    if (tags) {
+      const tagArray = tags.split(',');
+      return tagArray;
+    }
+    return [];
+  };
 
   function getMealProfile() {
+    const tagArray = getTagArray(recipeInDetail.strTags);
+    const date = getDate();
     const profileRecipe = {
-      date,
-      type: 'food',
       id: recipeInDetail.idMeal,
-      image: recipeInDetail.strMealThumb,
-      name: recipeInDetail.strMeal,
-      category: recipeInDetail.strCategory,
-      alcoholic: '',
+      type: 'food',
       nationality: recipeInDetail.strArea,
-      tags: recipeInDetail.strTags,
+      category: recipeInDetail.strCategory,
+      alcoholicOrNot: '',
+      name: recipeInDetail.strMeal,
+      image: recipeInDetail.strMealThumb,
+      doneDate: date,
+      tags: tagArray,
     };
+    console.log(profileRecipe);
     return profileRecipe;
   }
 
   function getDrinkProfile() {
+    const tagArray = getTagArray(recipeInDetail.strTags);
+    const date = getDate();
     const profileRecipe = {
-      date,
-      type: 'drink',
       id: recipeInDetail.idDrink,
-      image: recipeInDetail.strDrinkThumb,
-      name: recipeInDetail.strDrink,
-      category: recipeInDetail.strCategory,
-      alcoholic: recipeInDetail.strAlcoholic,
       nationality: '',
-      tags: '',
+      type: 'drink',
+      category: recipeInDetail.strCategory,
+      alcoholicOrNot: recipeInDetail.strAlcoholic,
+      name: recipeInDetail.strDrink,
+      image: recipeInDetail.strDrinkThumb,
+      doneDate: date,
+      tags: tagArray,
     };
     return profileRecipe;
   }

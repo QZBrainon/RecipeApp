@@ -78,13 +78,16 @@ function useProgressInfo(inProgressState) {
         key={ `${ingredient}_${index}` }
         style={ getStyle(ingredient) }
       >
-        <input
-          type="checkbox"
-          name={ ingredient }
-          onChange={ handleChange }
-          checked={ (checkedItens.includes(ingredient)) }
-        />
-        {ingredient}
+        <label htmlFor={ `ingredient_${index}` }>
+          <input
+            type="checkbox"
+            id={ `ingredient_${index}` }
+            name={ `${ingredient}_${index}` }
+            onChange={ handleChange }
+            checked={ (checkedItens.includes(`${ingredient}_${index}`)) }
+          />
+          {ingredient}
+        </label>
       </li>
     ));
   };
