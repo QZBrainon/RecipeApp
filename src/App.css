@@ -103,8 +103,38 @@
   justify-content: center;
 }
 
+.embedContainer iframe {
+  width: 100%;
+}
+
 .recipeCard img {
   border-radius: 7%;
+}
+
+#detailContainer img {
+  width: 100%;
+}
+
+.recomendations {
+  display: flex;
+  gap: 0.5em;
+  overflow-x: auto;
+  max-width: 300px;
+}
+
+.recomendCard{
+  min-width: 150px;
+  text-align: center;
+}
+
+.sliderImg {
+  width: 100px;
+  border-radius: 50%;
+}
+
+#startBtn {
+  position: fixed;
+  bottom: 0;
 }
 
 footer {
