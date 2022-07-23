@@ -1,16 +1,46 @@
+// doc: https://stackoverflow.com/questions/55177928/how-do-you-check-a-checkbox-in-react-testing-library
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { screen} from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import getMock from './mocks/mock_function';
 import renderWithRouter from './renderWithRouter';
 import App from '../App';
 
+ /* class LocalStorageMock {
+    constructor() {
+      this.store = {}
+    }
+  
+    clear() {
+      this.store = {}
+    }
+  
+    getItem(key) {
+      return this.store[key] || null
+    }
+  
+    setItem(key, value) {
+      this.store[key] = value
+    }
+  
+    removeItem(key) {
+      delete this.store[key]
+    }
+  }
+  
+  global.localStorage = new LocalStorageMock */
+
+
 describe('Teste da Tela RecipeInProgress', () => {
     beforeEach(() => {
-         const { history } = renderWithRouter(<App/>);
-         history.push('/foods/:id/in-progress');
+        
+         
     });
     
-    it('01. se tem os inputs na tela ', async () => {
+   it('01. se tem os inputs na tela ', async () => {
+    const { history } = renderWithRouter(<App/>);
+    history.push('/foods/:id/in-progress');
+
     const imgRecipe = await screen.findByTestId('recipe-photo');
     const textRecipe = await screen.findByTestId('recipe-title');
     const btnShare = await screen.findByTestId('share-btn');
@@ -19,14 +49,9 @@ describe('Teste da Tela RecipeInProgress', () => {
     const instructions = await screen.findByTestId('instructions');
     const btnFinish = await screen.findByTestId('finish-recipe-btn');
 
-        const arrayIngredients = ['0','1','2','3','4','5','6','7','8','9','10','11','12'];
+    
 
-        arrayIngredients.forEach( async (num) => {
-            
-            const listItem = await screen.findByTestId(`${num}-ingredient-step`);
-            expect(listItem).toBeInTheDocument();
-        });
-
+    
         expect(imgRecipe).toBeInTheDocument();
         expect(textRecipe).toBeInTheDocument();
         expect(btnShare).toBeInTheDocument();
@@ -37,20 +62,28 @@ describe('Teste da Tela RecipeInProgress', () => {
         expect(instructions).toBeInTheDocument();
     });
 
-    it('02. se favoritar funciona corretamente', async () => {
-        
+    it.only('02. se favoritar funciona corretamente', async () => {
+        const { history } = renderWithRouter(<App/>);
+        history.push('/foods/52977/in-progress');
+
         const imgNonFav = await screen.findByAltText('non-favorite icon');
         
+        expect(imgNonFav).toBeInTheDocument();
         userEvent.click(await screen.findByTestId('favorite-btn'));
 
         const imgFav = await screen.findByAltText('favorite icon');
 
         expect(imgFav).toBeInTheDocument();
+        
     });
 
-    it('03. se ao clicar no checkbox coloca o "style = text-decoration: line-through"', async () => {
-        const checkbox = await screen.findByRole('checkbox', {checked:false });
+ it('03. se ao clicar no checkbox coloca o "style = text-decoration: line-through"', async () => {
+         getMock();
 
-        expect(checkbox).toBe('false');
+        const { history } = renderWithRouter(<App/>);
+        history.push('/foods/52804/in-progress');
+
+        const checkbox = await screen.findAllByRole('checkbox');
+        expect(checkbox).toHaveLength(13);
     }); 
 });

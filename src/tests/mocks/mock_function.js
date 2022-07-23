@@ -7,7 +7,7 @@ import MOCK_FOOD_DETAIL from "./food_detail";
 
 function getMock() {
     return global.fetch = jest.fn(async (endpoint) => ({
-        json: () => {
+        json: async  () => {
           if (endpoint === ENDPOINT_FOOD) {
             return MOCK_FOOD_DATA;
           }
