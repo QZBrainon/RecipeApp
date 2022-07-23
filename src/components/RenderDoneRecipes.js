@@ -7,20 +7,7 @@ import useCopyToClipBoard from '../hooks/useCopyToClipboard';
 function RenderDoneRecipes() {
   const { recipesData: { doneRecipes } } = useContext(ReceitasContext);
   const [isLinkInClipBoard, setLinkInClipBoard] = useState(false);
-  // const [localDataRecipes, setLocalData] = useState([]);
   const { toggleClipMessage } = useCopyToClipBoard(isLinkInClipBoard);
-
-  // useEffect(() => {
-  //   const getDoneRecipes = localStorage.getItem('doneRecipes');
-  //   if (getDoneRecipes) {
-  //     const recipesList = JSON.parse(getDoneRecipes);
-  //     setLocalData(recipesList);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   setDoneRecipes(localDataRecipes);
-  // }, [localDataRecipes, setDoneRecipes]);
 
   const getTagsElements = (tagArray, index) => {
     if (tagArray !== null) {
