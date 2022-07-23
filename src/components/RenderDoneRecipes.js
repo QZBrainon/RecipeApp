@@ -53,7 +53,7 @@ function RenderDoneRecipes() {
 
   function renderDoneCards() {
     if (doneRecipes !== undefined) {
-      return localDataRecipes.map((profile, index) => {
+      return doneRecipes.map((profile, index) => {
         const { id, image, name, nationality, category, alcoholicOrNot,
           doneDate, tags, type } = profile;
         const url = getUrl(id, type);
