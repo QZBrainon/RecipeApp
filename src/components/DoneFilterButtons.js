@@ -2,10 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import ReceitasContext from '../hooks/ReceitasContext';
 
 function DoneFilterButtons() {
-  const { setDoneRecipes, recipesData: { doneRecipes } } = useContext(ReceitasContext);
+  const { setDoneRecipes } = useContext(ReceitasContext);
   const [originalData, setOriginalData] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
-  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     const getDoneRecipes = localStorage.getItem('doneRecipes');
@@ -16,18 +15,14 @@ function DoneFilterButtons() {
   }, []);
 
   useEffect(() => {
-    setDoneRecipes(filteredData);
-  }, [filteredData, setDoneRecipes]);
-
-  useEffect(() => {
-    if (doneRecipes !== undefined) {
+    if (originalData !== undefined) {
       if (activeFilter === 'all') {
-        return setFilteredData(originalData);
+        return setDoneRecipes(originalData);
       }
-      const teste = doneRecipes.filter((recipe) => recipe.type === activeFilter);
-      return setFilteredData(teste);
+      const teste = originalData.filter((recipe) => recipe.type === activeFilter);
+      return setDoneRecipes(teste);
     }
-  }, [activeFilter, doneRecipes, originalData, setDoneRecipes]);
+  }, [activeFilter, originalData, setDoneRecipes]);
 
   const applyFilter = ({ target: { name } }) => {
     setActiveFilter(name);
