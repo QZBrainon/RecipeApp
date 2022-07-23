@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
+import clipboardCopy from 'clipboard-copy';
+import { Link } from 'react-router-dom';
 import ReceitasContext from '../hooks/ReceitasContext';
-import shareIcon from '../images/shareIcon.svg';
+import useCopyToClipBoard from '../hooks/useCopyToClipboard';
 
 function RenderDoneRecipes() {
   const { setDoneRecipes, recipesData: { doneRecipes } } = useContext(ReceitasContext);
+  const [isLinkInClipBoard, setLinkInClipBoard] = useState(false);
   const [localDataRecipes, setLocalData] = useState([]);
+  const { toggleClipMessage } = useCopyToClipBoard(isLinkInClipBoard);
 
   useEffect(() => {
     const getDoneRecipes = localStorage.getItem('doneRecipes');
@@ -31,18 +35,39 @@ function RenderDoneRecipes() {
     }
   };
 
+  const shareUrl = (details) => {
+    const initialUrl = (window.location.href).replace('done-recipes', '');
+    const url = initialUrl + details;
+    clipboardCopy(url);
+    return setLinkInClipBoard(!isLinkInClipBoard);
+  };
+
+  const getUrl = (id, type) => {
+    if (type === 'food') {
+      const url = `foods/${id}`;
+      return url;
+    }
+    const url = `drinks/${id}`;
+    return url;
+  };
+
   function renderDoneCards() {
     if (doneRecipes !== undefined) {
-      return doneRecipes.map((profile, index) => {
-        if (profile.type === 'food') {
-          const { image, name, nationality, category, doneDate, tags } = profile;
+      return localDataRecipes.map((profile, index) => {
+        const { id, image, name, nationality, category, alcoholicOrNot,
+          doneDate, tags, type } = profile;
+        const url = getUrl(id, type);
+        if (type === 'food') {
           return (
-            <article className="doneRecipesCard">
-              <img
-                src={ image }
-                alt={ name }
-                data-testid={ `${index}-horizontal-image` }
-              />
+            <article key={ `${name}_${id}` } className="doneRecipesCard">
+              <Link to={ url }>
+                <img
+                  src={ image }
+                  alt={ name }
+                  className="doneImg"
+                  data-testid={ `${index}-horizontal-image` }
+                />
+              </Link>
               <p data-testid={ `${index}-horizontal-top-text` }>
                 { nationality }
                 {' '}
@@ -50,37 +75,35 @@ function RenderDoneRecipes() {
                 {' '}
                 { category }
               </p>
-              <h2 data-testid={ `${index}-horizontal-name` }>{ name }</h2>
+              <Link to={ url }>
+                <h2 data-testid={ `${index}-horizontal-name` }>{ name }</h2>
+              </Link>
               <p data-testid={ `${index}-horizontal-done-date` }>{ doneDate }</p>
               { getTagsElements(tags, index) }
-              <button type="button">
-                <img
-                  src={ shareIcon }
-                  alt="compartilhar"
-                  data-testid={ `${index}-horizontal-share-btn` }
-                />
+              <button type="button" onClick={ () => shareUrl(url) }>
+                { toggleClipMessage(index) }
               </button>
             </article>
           );
         }
-        if (profile.type === 'drink') {
-          const { image, name, alcoholicOrNot, doneDate } = profile;
+        if (type === 'drink') {
           return (
-            <article className="doneRecipesCard">
-              <img
-                src={ image }
-                alt={ name }
-                data-testid={ `${index}-horizontal-image` }
-              />
-              <p data-testid={ `${index}-horizontal-top-text` }>{ alcoholicOrNot }</p>
-              <h2 data-testid={ `${index}-horizontal-name` }>{ name }</h2>
-              <p data-testid={ `${index}-horizontal-done-date` }>{ doneDate }</p>
-              <button type="button">
+            <article key={ `${name}_${id}` } className="doneRecipesCard">
+              <Link to={ url }>
                 <img
-                  src={ shareIcon }
-                  alt="compartilhar"
-                  data-testid={ `${index}-horizontal-share-btn` }
+                  src={ image }
+                  alt={ name }
+                  className="doneImg"
+                  data-testid={ `${index}-horizontal-image` }
                 />
+              </Link>
+              <p data-testid={ `${index}-horizontal-top-text` }>{ alcoholicOrNot }</p>
+              <Link to={ url }>
+                <h2 data-testid={ `${index}-horizontal-name` }>{ name }</h2>
+              </Link>
+              <p data-testid={ `${index}-horizontal-done-date` }>{ doneDate }</p>
+              <button type="button" onClick={ () => shareUrl(url) }>
+                { toggleClipMessage(index) }
               </button>
             </article>
           );

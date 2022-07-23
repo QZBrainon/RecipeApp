@@ -16,8 +16,6 @@ function useStoreDoneRecipes() {
       const zero = '0';
       month = zero.concat(month);
     }
-
-    console.log(`${date}/${month}/${year}`);
     return (`${date}/${month}/${year}`);
   };
 
@@ -43,7 +41,6 @@ function useStoreDoneRecipes() {
       doneDate: date,
       tags: tagArray,
     };
-    console.log(profileRecipe);
     return profileRecipe;
   }
 
