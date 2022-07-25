@@ -6,10 +6,11 @@ import ReceitasContext from './ReceitasContext';
 import useActualPath from './useActualPath';
 
 function useFavoriteButton() {
-  const { recipesData: { recipeInDetail } } = useContext(ReceitasContext);
+  const { recipesData: { recipeInDetail,
+    favoriteRecipes }, setFavRecipes } = useContext(ReceitasContext);
   const { params: { id } } = useRouteMatch();
   const actualPath = useActualPath();
-
+  // aqui apenas para justivicar um commit...
   function sackStorageFavorite() {
     const favItens = JSON.parse(localStorage.getItem('favoriteRecipes'));
     const newFavItens = [...favItens];
@@ -92,10 +93,33 @@ function useFavoriteButton() {
     );
   }
 
+  function deleteFavIten(favId) {
+    const newFavData = favoriteRecipes.filter((fav) => fav.id !== favId);
+    const newStorageData = JSON.stringify([...newFavData]);
+    setFavRecipes(newFavData);
+    localStorage.setItem('favoriteRecipes', newStorageData);
+  }
+
+  function getFavButton(favId, index) {
+    return (
+      <button
+        type="button"
+        onClick={ () => deleteFavIten(favId) }
+      >
+        <img
+          src={ blackHeartIcon }
+          data-testid={ `${index}-horizontal-favorite-btn` }
+          alt="favorite icon"
+        />
+      </button>
+    );
+  }
+
   const useFavoriteButtonData = {
     setStorageFavorite,
     getFavoriteButton,
-    sackStorageFavorite };
+    sackStorageFavorite,
+    getFavButton };
 
   return useFavoriteButtonData;
 }

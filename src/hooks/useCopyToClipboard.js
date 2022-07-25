@@ -10,7 +10,21 @@ function useCopyToClipBoard(isLinkInClipBoard) {
     );
   }
 
-  const useCopyToClipBoardData = { toggleClipboardMessage };
+  function toggleClipMessage(index) {
+    return (
+      (isLinkInClipBoard)
+        ? <p>Link copied!</p>
+        : (
+          <img
+            src={ shareIcon }
+            alt="compartilhar"
+            data-testid={ `${index}-horizontal-share-btn` }
+          />
+        )
+    );
+  }
+
+  const useCopyToClipBoardData = { toggleClipboardMessage, toggleClipMessage };
 
   return useCopyToClipBoardData;
 }

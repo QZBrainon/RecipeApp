@@ -41,11 +41,11 @@ function useProgressInfo(inProgressState) {
     return setCheckedItems(refreshCheckedItens);
   };
 
-  const getStyle = (ingredient) => {
+  const getStyle = (ingredient, index) => {
     const style = {
       textDecoration: 'line-through',
     };
-    if (checkedItens.includes(ingredient)) {
+    if (checkedItens.includes(`${ingredient}_${index}`)) {
       return style;
     }
   };
@@ -76,7 +76,7 @@ function useProgressInfo(inProgressState) {
       <li
         data-testid={ `${index}-ingredient-step` }
         key={ `${ingredient}_${index}` }
-        style={ getStyle(ingredient) }
+        style={ getStyle(ingredient, index) }
       >
         <label htmlFor={ `ingredient_${index}` }>
           <input

@@ -1,20 +1,19 @@
 import React from 'react';
+import FavoriteFilterButtons from '../components/FavoriteFilterButtons';
 import Header from '../components/Header';
+import RenderFavoriteRecipes from '../components/RenderFavoriteRecipes';
 
 function FavoriteRecipes() {
   return (
-    <main>
-      <Header />
-      <button type="button" data-testid="filter-by-all-btn">
-        All
-      </button>
-      <button type="button" data-testid="filter-by-food-btn">
-        Food
-      </button>
-      <button type="button" data-testid="filter-by-drink-btn">
-        Drinks
-      </button>
-    </main>
+    <>
+      <header>
+        <Header />
+      </header>
+      <main>
+        <FavoriteFilterButtons />
+        <RenderFavoriteRecipes />
+      </main>
+    </>
   );
 }
 

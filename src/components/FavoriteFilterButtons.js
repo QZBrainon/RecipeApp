@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ReceitasContext from '../hooks/ReceitasContext';
 
-function DoneFilterButtons() {
-  const { setDoneRecipes } = useContext(ReceitasContext);
+function FavoriteFilterButtons() {
+  const { setFavRecipes } = useContext(ReceitasContext);
   const [originalData, setOriginalData] = useState([]);
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setFilter] = useState('all');
 
   useEffect(() => {
-    const getDoneRecipes = localStorage.getItem('doneRecipes');
-    if (getDoneRecipes) {
-      const recipesList = JSON.parse(getDoneRecipes);
+    const getFavRecipes = localStorage.getItem('favoriteRecipes');
+    if (getFavRecipes) {
+      const recipesList = JSON.parse(getFavRecipes);
       setOriginalData(recipesList);
     }
   }, []);
@@ -17,15 +17,15 @@ function DoneFilterButtons() {
   useEffect(() => {
     if (originalData !== undefined) {
       if (activeFilter === 'all') {
-        return setDoneRecipes(originalData);
+        return setFavRecipes(originalData);
       }
       const teste = originalData.filter((recipe) => recipe.type === activeFilter);
-      return setDoneRecipes(teste);
+      return setFavRecipes(teste);
     }
-  }, [activeFilter, originalData, setDoneRecipes]);
+  }, [activeFilter, originalData, setFavRecipes]);
 
   const applyFilter = ({ target: { name } }) => {
-    setActiveFilter(name);
+    setFilter(name);
   };
 
   return (
@@ -58,4 +58,4 @@ function DoneFilterButtons() {
   );
 }
 
-export default DoneFilterButtons;
+export default FavoriteFilterButtons;
