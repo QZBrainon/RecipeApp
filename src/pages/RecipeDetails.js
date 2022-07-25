@@ -117,6 +117,7 @@ function RecipeDetails() {
           src={ imgUrl }
           alt="thumbnail"
           data-testid="recipe-photo"
+          className="containerImg"
         />
         <p data-testid="recipe-category">
           Category:
@@ -150,7 +151,7 @@ function RecipeDetails() {
       <button
         type="button"
         data-testid="start-recipe-btn"
-        id="startBtn"
+        className="startBtn"
       >
         Start Recipe
 

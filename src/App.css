@@ -111,8 +111,10 @@
   border-radius: 7%;
 }
 
-#detailContainer img {
-  width: 100%;
+.containerImg {
+  border-radius: 6%;
+  margin: auto;
+  width: 80%;
 }
 
 .recomendations {
@@ -132,7 +134,7 @@
   width: 100px;
 }
 
-#startBtn {
+.startBtn {
   bottom: 0;
   position: fixed;
 }
