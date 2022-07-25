@@ -10,7 +10,7 @@ function useFavoriteButton() {
     favoriteRecipes }, setFavRecipes } = useContext(ReceitasContext);
   const { params: { id } } = useRouteMatch();
   const actualPath = useActualPath();
-// aqui apenas para justivicar um commit...
+  // aqui apenas para justivicar um commit...
   function sackStorageFavorite() {
     const favItens = JSON.parse(localStorage.getItem('favoriteRecipes'));
     const newFavItens = [...favItens];
