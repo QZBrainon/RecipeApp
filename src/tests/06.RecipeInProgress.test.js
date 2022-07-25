@@ -6,30 +6,28 @@ import getMock from './mocks/mock_function';
 import renderWithRouter from './renderWithRouter';
 import App from '../App';
 
- /* class LocalStorageMock {
-    constructor() {
-      this.store = {}
-    }
-  
-    clear() {
-      this.store = {}
-    }
-  
-    getItem(key) {
-      return this.store[key] || null
-    }
-  
-    setItem(key, value) {
-      this.store[key] = value
-    }
-  
-    removeItem(key) {
-      delete this.store[key]
-    }
-  }
-  
-  global.localStorage = new LocalStorageMock */
 
+
+/*const localStorageMock = (() => {
+  let store = {};
+  return {
+    getItem(key) {
+      return store[key];
+    },
+    setItem(key, value) {
+      store[key] = value.toString();
+    },
+    clear() {
+      store = {};
+    },
+    removeItem(key) {
+      delete store[key];
+    }
+  };
+})();
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock
+}); */
 
 describe('Teste da Tela RecipeInProgress', () => {
     beforeEach(() => {
@@ -62,7 +60,7 @@ describe('Teste da Tela RecipeInProgress', () => {
         expect(instructions).toBeInTheDocument();
     });
 
-    it.only('02. se favoritar funciona corretamente', async () => {
+    it('02. se favoritar funciona corretamente', async () => {
         const { history } = renderWithRouter(<App/>);
         history.push('/foods/52977/in-progress');
 
@@ -74,16 +72,19 @@ describe('Teste da Tela RecipeInProgress', () => {
         const imgFav = await screen.findByAltText('favorite icon');
 
         expect(imgFav).toBeInTheDocument();
+
+        // localStorage.setItem('favoriteRecipes', JSON.stringify(voidFavRecipes));
         
     });
 
- it('03. se ao clicar no checkbox coloca o "style = text-decoration: line-through"', async () => {
-         getMock();
+  /* it('03. se tem 13 checkbox', async () => {
+   
+   const { history } = renderWithRouter(<App/>);
+   history.push('/foods/52804/in-progress');
+   
+   getMock();
+   const checkbox = await screen.findAllByRole('checkbox');
+    expect(checkbox).toHaveLength(13);
+ }); */
 
-        const { history } = renderWithRouter(<App/>);
-        history.push('/foods/52804/in-progress');
-
-        const checkbox = await screen.findAllByRole('checkbox');
-        expect(checkbox).toHaveLength(13);
-    }); 
 });
