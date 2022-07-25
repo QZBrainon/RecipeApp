@@ -121,6 +121,7 @@ function RecipeDetails() {
         />
         <p data-testid="recipe-category">
           Category:
+          {' '}
           {category}
           {' '}
           {' '}
