@@ -109,6 +109,7 @@ function RecipeDetails({ match: { params: { id } } }) {
             data-testid={ `${index}-recomendation-card` }
             className="recomendCard"
           >
+            {console.log('entrou no return')}
             <img src={ item.strMealThumb } alt="thumbnail" />
             <p
               key={ item.idMeal }
@@ -143,9 +144,11 @@ function RecipeDetails({ match: { params: { id } } }) {
           src={ imgUrl }
           alt="thumbnail"
           data-testid="recipe-photo"
+          className="containerImg"
         />
         <p data-testid="recipe-category">
           Category:
+          {' '}
           {category}
           {' '}
           {' '}
@@ -204,6 +207,7 @@ function RecipeDetails({ match: { params: { id } } }) {
           </button>
         )
       }
+
     </main>
   );
 }
