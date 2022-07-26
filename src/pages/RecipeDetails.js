@@ -1,15 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-// import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import ReceitasContext from '../hooks/ReceitasContext';
 import useActualPath from '../hooks/useActualPath';
 import useDetails from '../hooks/useDetails';
 
-function RecipeDetails({ match: { params: { id } } }) {
-  const [buttonText, setButtonText] = useState('Start Recipe');
-  const [changeBtn, setChangeBtn] = useState(false);
+function RecipeDetails() {
+  const { params: { id } } = useRouteMatch();
   const actualpath = useActualPath();
-  // const history = useHistory();
+  const history = useHistory();
 
   useDetails(actualpath);
 
@@ -19,21 +17,6 @@ function RecipeDetails({ match: { params: { id } } }) {
   } = useContext(ReceitasContext);
 
   const objLength = Object.keys(recipeInDetail).length;
-
-  useEffect(() => {
-    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (inProgressRecipes) {
-      const mealsRecipes = inProgressRecipes?.meals;
-      const cocktailsRecipes = inProgressRecipes?.cocktails;
-      // const result = arrayOfProgressRecipes?.some(
-      //   (item) => item.recipeId === id,
-      // ) ? 'Continue Recipe' : 'Start Recipe';
-      if (mealsRecipes[id] || cocktailsRecipes[id]) {
-        return setButtonText('Continue Recipe');
-      }
-    }
-    return setButtonText('Continue Recipe');
-  }, [id, changeBtn]);
 
   const generateIngredients = () => {
     const arrayOfIngredients = Object.keys(recipeInDetail)
@@ -128,8 +111,24 @@ function RecipeDetails({ match: { params: { id } } }) {
     const doneRecipes = localStorage.getItem('doneRecipes');
     if (doneRecipes) {
       const arrayOfDoneRecipes = JSON.parse(doneRecipes);
-      return arrayOfDoneRecipes.find((item) => item.id === id);
+      return (arrayOfDoneRecipes.some((item) => item.id === id));
     }
+  };
+
+  const renderTextBtn = () => {
+    const inProgressData = localStorage.getItem('inProgressRecipes');
+    const inProgressRecipes = JSON.parse(inProgressData);
+    const mealsId = Object.keys(inProgressRecipes.meals);
+    const drinksId = Object.keys(inProgressRecipes.cocktails);
+    const testMeals = (mealsId.some((item) => item === id));
+    const testDrinks = (drinksId.some((item) => item === id));
+    if (testMeals || testDrinks) { return 'Continue Recipe'; }
+    return 'Start Recipe';
+  };
+
+  const goToInProgress = () => {
+    const url = `${actualpath}/in-progress`;
+    return history.push(url);
   };
 
   return (
@@ -172,47 +171,16 @@ function RecipeDetails({ match: { params: { id } } }) {
         <div className="recomendations">
           {generateRecomendations()}
         </div>
+        {
+          (!checkDoneItem()) && (
+            <button type="button" className="startBtn" onClick={ goToInProgress }>
+              { renderTextBtn() }
+            </button>
+          )
+        }
       </div>
-      {
-        checkDoneItem() ? null : (
-          <button
-            type="button"
-            data-testid="start-recipe-btn"
-            id="startBtn"
-            // onClick={ () => history.push(`${id}/in-progress`) }
-            onClick={ () => {
-              const recipeKey = actualpath.includes('food') ? 'meals' : 'cocktails';
-              const storingItem = {
-                [recipeKey]: {
-                  [id]: [],
-                },
-              };
-              const getStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
-              if (getStorage) {
-                localStorage.setItem('inProgressRecipes', JSON.stringify(
-                  { ...getStorage,
-                    [recipeKey]: {
-                      ...getStorage[recipeKey], [id]: [],
-                    },
-                  },
-                ));
-              } else {
-                localStorage.setItem('inProgressRecipes', JSON.stringify(storingItem));
-              }
-              setChangeBtn(!changeBtn);
-            } }
-          >
-            { buttonText }
-
-          </button>
-        )
-      }
-
     </main>
   );
 }
 
-RecipeDetails.propTypes = {
-  match: PropTypes.string.isRequired,
-};
 export default RecipeDetails;
