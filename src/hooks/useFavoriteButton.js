@@ -10,7 +10,6 @@ function useFavoriteButton() {
     favoriteRecipes }, setFavRecipes } = useContext(ReceitasContext);
   const { params: { id } } = useRouteMatch();
   const actualPath = useActualPath();
-  // aqui apenas para justivicar um commit...
   function sackStorageFavorite() {
     const favItens = JSON.parse(localStorage.getItem('favoriteRecipes'));
     const newFavItens = [...favItens];
@@ -45,10 +44,12 @@ function useFavoriteButton() {
       };
     }
     const favItens = JSON.parse(localStorage.getItem('favoriteRecipes'));
-    const isFavRecipeOnStorage = favItens.filter((item) => item.id === favRecipe.id);
-    if (!isFavRecipeOnStorage.length) {
-      const newFavItens = JSON.stringify([...favItens, favRecipe]);
-      localStorage.setItem('favoriteRecipes', newFavItens);
+    if (favItens !== null) {
+      const isFavRecipeOnStorage = favItens.filter((item) => item.id === favRecipe.id);
+      if (!isFavRecipeOnStorage.length) {
+        const newFavItens = JSON.stringify([...favItens, favRecipe]);
+        localStorage.setItem('favoriteRecipes', newFavItens);
+      }
     }
   }
 

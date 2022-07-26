@@ -65,7 +65,6 @@ function useStoreDoneRecipes() {
     const doneRecipes = localStorage.getItem('doneRecipes');
     if (!doneRecipes) {
       const doneRecipe = JSON.stringify([profile]);
-      console.log(doneRecipe);
       return localStorage.setItem('doneRecipes', doneRecipe);
     }
     const finishedRecipes = JSON.parse(doneRecipes);
