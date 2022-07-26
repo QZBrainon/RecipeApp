@@ -1,11 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+// import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import ReceitasContext from '../hooks/ReceitasContext';
-
 import useActualPath from '../hooks/useActualPath';
 import useDetails from '../hooks/useDetails';
 
-function RecipeDetails() {
+function RecipeDetails({ match: { params: { id } } }) {
+  const [buttonText, setButtonText] = useState('Start Recipe');
+  const [changeBtn, setChangeBtn] = useState(false);
   const actualpath = useActualPath();
+  // const history = useHistory();
 
   useDetails(actualpath);
 
@@ -15,6 +19,21 @@ function RecipeDetails() {
   } = useContext(ReceitasContext);
 
   const objLength = Object.keys(recipeInDetail).length;
+
+  useEffect(() => {
+    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (inProgressRecipes) {
+      const mealsRecipes = inProgressRecipes?.meals;
+      const cocktailsRecipes = inProgressRecipes?.cocktails;
+      // const result = arrayOfProgressRecipes?.some(
+      //   (item) => item.recipeId === id,
+      // ) ? 'Continue Recipe' : 'Start Recipe';
+      if (mealsRecipes[id] || cocktailsRecipes[id]) {
+        return setButtonText('Continue Recipe');
+      }
+    }
+    return setButtonText('Continue Recipe');
+  }, [id, changeBtn]);
 
   const generateIngredients = () => {
     const arrayOfIngredients = Object.keys(recipeInDetail)
@@ -104,6 +123,14 @@ function RecipeDetails() {
     return recomendedItems;
   };
 
+  const checkDoneItem = () => {
+    const doneRecipes = localStorage.getItem('doneRecipes');
+    if (doneRecipes) {
+      const arrayOfDoneRecipes = JSON.parse(doneRecipes);
+      return arrayOfDoneRecipes.find((item) => item.id === id);
+    }
+  };
+
   return (
     <main>
       <div id="detailContainer">
@@ -134,9 +161,6 @@ function RecipeDetails() {
             height="480"
             src={ videoUrl?.replace('watch?v=', 'embed/') }
             frameBorder="0"
-            allow="autoplay;
-            encrypted-media;
-            gyroscope; picture-in-picture"
             allowFullScreen
             title="Embedded youtube"
 
@@ -146,16 +170,45 @@ function RecipeDetails() {
           {generateRecomendations()}
         </div>
       </div>
-      <button
-        type="button"
-        data-testid="start-recipe-btn"
-        id="startBtn"
-      >
-        Start Recipe
+      {
+        checkDoneItem() ? null : (
+          <button
+            type="button"
+            data-testid="start-recipe-btn"
+            id="startBtn"
+            // onClick={ () => history.push(`${id}/in-progress`) }
+            onClick={ () => {
+              const recipeKey = actualpath.includes('food') ? 'meals' : 'cocktails';
+              const storingItem = {
+                [recipeKey]: {
+                  [id]: [],
+                },
+              };
+              const getStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
+              if (getStorage) {
+                localStorage.setItem('inProgressRecipes', JSON.stringify(
+                  { ...getStorage,
+                    [recipeKey]: {
+                      ...getStorage[recipeKey], [id]: [],
+                    },
+                  },
+                ));
+              } else {
+                localStorage.setItem('inProgressRecipes', JSON.stringify(storingItem));
+              }
+              setChangeBtn(!changeBtn);
+            } }
+          >
+            { buttonText }
 
-      </button>
+          </button>
+        )
+      }
     </main>
   );
 }
 
+RecipeDetails.propTypes = {
+  match: PropTypes.string.isRequired,
+};
 export default RecipeDetails;
