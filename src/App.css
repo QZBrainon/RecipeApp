@@ -1,3 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  font-family:'Montserrat', sans-serif;
+  background-color: #FFFFF5;
+}
+
 .meals {
   align-items: center;
   background: #0fa36b;
@@ -67,14 +84,43 @@
   }
 }
 
-.loginItens {
-  align-items: stretch;
+.overlay{
+  height: 100vh;
+  background-image: url(https://images.unsplash.com/photo-1506368249639-73a05d6f6488?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80);
+  position: absolute;
+  object-fit: cover;
+  width: 100%;
+  overflow: hidden;
+}
+
+.loginContainer {
   display: flex;
   flex-direction: column;
-  height: 13vh;
+  background-color:#462b2550;
+  margin: 70px;
+  border-radius: 10px;
+  height: 80vh;
+}
+
+.loginContainer img {
+  position: absolute;
+  width: 25%;
+  margin-left: 100px;
+}
+
+.loginItens {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 18vh;
   justify-content: space-between;
   margin: 30vh auto;
-  width: 75%;
+  width: 200px;
+  gap: 1em;
+}
+
+.loginItens button {
+  width: 80%;
 }
 
 .under_construction {
@@ -140,7 +186,7 @@
 }
 
 footer {
-  background-color: whitesmoke;
+  background-color: #fffff579;
   bottom: 0;
   position: fixed;
   width: 100%;
@@ -162,4 +208,51 @@ footer {
 
 .doneRecipesCard .doneImg {
   width: 100%;
+}
+
+button{
+  border-radius: 10px;
+  background-color: #fae0ac;
+  color: #702E1F;
+  border-style: none;
+}
+
+button:hover{
+  background-color: #AD0101;
+  color: #fae0ac;
+  border:1px solid #AD0101 ;
+}
+
+a{
+  color: #ebd078;
+  text-decoration: none;
+}
+
+a:hover{
+  color: #AD0101;
+}
+
+h1{
+  color: #AD0101;
+  padding-left: 10px;
+}
+
+p{
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+img{
+  padding: 10px;
+}
+
+input{
+  border-radius: 7px;
+  border-style: solid;
+}
+
+.done-buttons{
+  width: 100px;
+  padding: 5px;
+  margin-left: 50px;
 }

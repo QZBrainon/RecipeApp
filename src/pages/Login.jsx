@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import logo from '../images/logo.png';
 
 const INITIAL_USER_DATA = {
   email: '',
@@ -34,41 +35,45 @@ function Login() {
   };
 
   return (
-    <form className="loginItens">
-      <label htmlFor="email">
-        E-mail:
-        {' '}
-        <input
-          type="text"
-          id="email"
-          name="email"
-          data-testid="email-input"
-          onChange={ handleChange }
-          value={ email }
-        />
-      </label>
-      <label htmlFor="password">
-        Password:
-        {' '}
-        <input
-          type="password"
-          id="password"
-          name="password"
-          data-testid="password-input"
-          autoComplete="off"
-          onChange={ handleChange }
-          value={ password }
-        />
-      </label>
-      <button
-        type="button"
-        data-testid="login-submit-btn"
-        disabled={ verifyConditions() }
-        onClick={ handleClick }
-      >
-        Enter
-      </button>
-    </form>
+    <div className="overlay">
+      <div className="loginContainer">
+        <img src={ logo } alt="logo" />
+        <form className="loginItens">
+          <h1>Login</h1>
+          <label htmlFor="email">
+            <input
+              type="text"
+              id="email"
+              name="email"
+              data-testid="email-input"
+              onChange={ handleChange }
+              value={ email }
+              placeholder="E-mail"
+            />
+          </label>
+          <label htmlFor="password">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              data-testid="password-input"
+              autoComplete="off"
+              onChange={ handleChange }
+              value={ password }
+              placeholder="Password"
+            />
+          </label>
+          <button
+            type="button"
+            data-testid="login-submit-btn"
+            disabled={ verifyConditions() }
+            onClick={ handleClick }
+          >
+            Enter
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
 
