@@ -33,7 +33,7 @@ function Header() {
   return (
     <header>
       <h1 data-testid="page-title">{ getTitle() }</h1>
-      <button type="button" onClick={ handleClick }>
+      <button type="button" onClick={ handleClick } className="profile-button">
         <img
           data-testid="profile-top-btn"
           alt="img-profile"
@@ -46,6 +46,7 @@ function Header() {
             type="button"
             id="search-toggle-btn"
             onClick={ toggleButton }
+            className="search-button"
           >
             <img
               data-testid="search-top-btn"

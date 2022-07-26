@@ -35,6 +35,7 @@ function DoneFilterButtons() {
         data-testid="filter-by-all-btn"
         name="all"
         onClick={ applyFilter }
+        className="done-buttons"
       >
         All
       </button>
@@ -43,6 +44,7 @@ function DoneFilterButtons() {
         data-testid="filter-by-food-btn"
         name="food"
         onClick={ applyFilter }
+        className="done-buttons"
       >
         Food
       </button>
@@ -51,6 +53,7 @@ function DoneFilterButtons() {
         data-testid="filter-by-drink-btn"
         name="drink"
         onClick={ applyFilter }
+        className="done-buttons"
       >
         Drinks
       </button>
