@@ -182,7 +182,9 @@ body {
 
 .startBtn {
   bottom: 0;
+  height: 6vh;
   position: fixed;
+  width: 100%;
 }
 
 footer {

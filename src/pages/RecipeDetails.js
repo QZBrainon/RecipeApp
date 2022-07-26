@@ -1,17 +1,30 @@
-import React, { useContext, useEffect, useState } from 'react';
-// import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React, { useContext, useState, useEffect } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import clipboardCopy from 'clipboard-copy';
 import ReceitasContext from '../hooks/ReceitasContext';
 import useActualPath from '../hooks/useActualPath';
 import useDetails from '../hooks/useDetails';
+import useCopyToClipBoard from '../hooks/useCopyToClipboard';
+import useFavoriteButton from '../hooks/useFavoriteButton';
 
-function RecipeDetails({ match: { params: { id } } }) {
-  const [buttonText, setButtonText] = useState('Start Recipe');
-  const [changeBtn, setChangeBtn] = useState(false);
+function RecipeDetails() {
+  const { params: { id } } = useRouteMatch();
   const actualpath = useActualPath();
-  // const history = useHistory();
+  const history = useHistory();
+  const [isLinkInClipBoard, setLinkInClipBoard] = useState(false);
+  const [isFavorite, setFavorite] = useState(false);
+  const { toggleClipboardMessage } = useCopyToClipBoard(isLinkInClipBoard);
+  const { getFavoriteButton } = useFavoriteButton();
 
   useDetails(actualpath);
+
+  useEffect(() => {
+    const favorites = localStorage.getItem('favoriteRecipes');
+    const favoriteRecipes = JSON.parse(favorites);
+    if (favoriteRecipes !== null && favoriteRecipes.some((item) => item.id === id)) {
+      setFavorite(true);
+    }
+  }, [id]);
 
   const {
     recipesData: { recipeInDetail },
@@ -20,20 +33,11 @@ function RecipeDetails({ match: { params: { id } } }) {
 
   const objLength = Object.keys(recipeInDetail).length;
 
-  useEffect(() => {
-    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (inProgressRecipes) {
-      const mealsRecipes = inProgressRecipes?.meals;
-      const cocktailsRecipes = inProgressRecipes?.cocktails;
-      // const result = arrayOfProgressRecipes?.some(
-      //   (item) => item.recipeId === id,
-      // ) ? 'Continue Recipe' : 'Start Recipe';
-      if (mealsRecipes[id] || cocktailsRecipes[id]) {
-        return setButtonText('Continue Recipe');
-      }
-    }
-    return setButtonText('Continue Recipe');
-  }, [id, changeBtn]);
+  const shareClick = () => {
+    const url = window.location.href;
+    clipboardCopy(url);
+    return setLinkInClipBoard(!isLinkInClipBoard);
+  };
 
   const generateIngredients = () => {
     const arrayOfIngredients = Object.keys(recipeInDetail)
@@ -126,10 +130,29 @@ function RecipeDetails({ match: { params: { id } } }) {
 
   const checkDoneItem = () => {
     const doneRecipes = localStorage.getItem('doneRecipes');
-    if (doneRecipes) {
-      const arrayOfDoneRecipes = JSON.parse(doneRecipes);
-      return arrayOfDoneRecipes.find((item) => item.id === id);
+    const arrayOfDoneRecipes = JSON.parse(doneRecipes);
+    if (arrayOfDoneRecipes) {
+      return (arrayOfDoneRecipes.some((item) => item.id === id));
     }
+    return false;
+  };
+
+  const renderTextBtn = () => {
+    const inProgressData = localStorage.getItem('inProgressRecipes');
+    const inProgressRecipes = JSON.parse(inProgressData);
+    if (inProgressRecipes !== null) {
+      const mealsId = Object.keys(inProgressRecipes.meals);
+      const drinksId = Object.keys(inProgressRecipes.cocktails);
+      const testMeals = (mealsId.some((item) => item === id));
+      const testDrinks = (drinksId.some((item) => item === id));
+      if (testMeals || testDrinks) { return 'Continue Recipe'; }
+    }
+    return 'Start Recipe';
+  };
+
+  const goToInProgress = () => {
+    const url = `${actualpath}/in-progress`;
+    return history.push(url);
   };
 
   return (
@@ -169,50 +192,30 @@ function RecipeDetails({ match: { params: { id } } }) {
 
           />
         </div>
+        <div>
+          <button type="button" data-testid="share-btn" onClick={ shareClick }>
+            { toggleClipboardMessage() }
+          </button>
+          { getFavoriteButton(isFavorite, setFavorite) }
+        </div>
         <div className="recomendations">
           {generateRecomendations()}
         </div>
+        {
+          (!checkDoneItem()) && (
+            <button
+              type="button"
+              data-testid="start-recipe-btn"
+              className="startBtn"
+              onClick={ goToInProgress }
+            >
+              { renderTextBtn() }
+            </button>
+          )
+        }
       </div>
-      {
-        checkDoneItem() ? null : (
-          <button
-            type="button"
-            data-testid="start-recipe-btn"
-            id="startBtn"
-            // onClick={ () => history.push(`${id}/in-progress`) }
-            onClick={ () => {
-              const recipeKey = actualpath.includes('food') ? 'meals' : 'cocktails';
-              const storingItem = {
-                [recipeKey]: {
-                  [id]: [],
-                },
-              };
-              const getStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
-              if (getStorage) {
-                localStorage.setItem('inProgressRecipes', JSON.stringify(
-                  { ...getStorage,
-                    [recipeKey]: {
-                      ...getStorage[recipeKey], [id]: [],
-                    },
-                  },
-                ));
-              } else {
-                localStorage.setItem('inProgressRecipes', JSON.stringify(storingItem));
-              }
-              setChangeBtn(!changeBtn);
-            } }
-          >
-            { buttonText }
-
-          </button>
-        )
-      }
-
     </main>
   );
 }
 
-RecipeDetails.propTypes = {
-  match: PropTypes.string.isRequired,
-};
 export default RecipeDetails;
