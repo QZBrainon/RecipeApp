@@ -1,15 +1,30 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+import clipboardCopy from 'clipboard-copy';
 import ReceitasContext from '../hooks/ReceitasContext';
 import useActualPath from '../hooks/useActualPath';
 import useDetails from '../hooks/useDetails';
+import useCopyToClipBoard from '../hooks/useCopyToClipboard';
+import useFavoriteButton from '../hooks/useFavoriteButton';
 
 function RecipeDetails() {
   const { params: { id } } = useRouteMatch();
   const actualpath = useActualPath();
   const history = useHistory();
+  const [isLinkInClipBoard, setLinkInClipBoard] = useState(false);
+  const [isFavorite, setFavorite] = useState(false);
+  const { toggleClipboardMessage } = useCopyToClipBoard(isLinkInClipBoard);
+  const { getFavoriteButton } = useFavoriteButton();
 
   useDetails(actualpath);
+
+  useEffect(() => {
+    const favorites = localStorage.getItem('favoriteRecipes');
+    const favoriteRecipes = JSON.parse(favorites);
+    if (favoriteRecipes !== null && favoriteRecipes.some((item) => item.id === id)) {
+      setFavorite(true);
+    }
+  }, [id]);
 
   const {
     recipesData: { recipeInDetail },
@@ -17,6 +32,12 @@ function RecipeDetails() {
   } = useContext(ReceitasContext);
 
   const objLength = Object.keys(recipeInDetail).length;
+
+  const shareClick = () => {
+    const url = window.location.href;
+    clipboardCopy(url);
+    return setLinkInClipBoard(!isLinkInClipBoard);
+  };
 
   const generateIngredients = () => {
     const arrayOfIngredients = Object.keys(recipeInDetail)
@@ -109,20 +130,23 @@ function RecipeDetails() {
 
   const checkDoneItem = () => {
     const doneRecipes = localStorage.getItem('doneRecipes');
-    if (doneRecipes) {
-      const arrayOfDoneRecipes = JSON.parse(doneRecipes);
+    const arrayOfDoneRecipes = JSON.parse(doneRecipes);
+    if (arrayOfDoneRecipes) {
       return (arrayOfDoneRecipes.some((item) => item.id === id));
     }
+    return false;
   };
 
   const renderTextBtn = () => {
     const inProgressData = localStorage.getItem('inProgressRecipes');
     const inProgressRecipes = JSON.parse(inProgressData);
-    const mealsId = Object.keys(inProgressRecipes.meals);
-    const drinksId = Object.keys(inProgressRecipes.cocktails);
-    const testMeals = (mealsId.some((item) => item === id));
-    const testDrinks = (drinksId.some((item) => item === id));
-    if (testMeals || testDrinks) { return 'Continue Recipe'; }
+    if (inProgressRecipes !== null) {
+      const mealsId = Object.keys(inProgressRecipes.meals);
+      const drinksId = Object.keys(inProgressRecipes.cocktails);
+      const testMeals = (mealsId.some((item) => item === id));
+      const testDrinks = (drinksId.some((item) => item === id));
+      if (testMeals || testDrinks) { return 'Continue Recipe'; }
+    }
     return 'Start Recipe';
   };
 
@@ -168,12 +192,23 @@ function RecipeDetails() {
 
           />
         </div>
+        <div>
+          <button type="button" data-testid="share-btn" onClick={ shareClick }>
+            { toggleClipboardMessage() }
+          </button>
+          { getFavoriteButton(isFavorite, setFavorite) }
+        </div>
         <div className="recomendations">
           {generateRecomendations()}
         </div>
         {
           (!checkDoneItem()) && (
-            <button type="button" className="startBtn" onClick={ goToInProgress }>
+            <button
+              type="button"
+              data-testid="start-recipe-btn"
+              className="startBtn"
+              onClick={ goToInProgress }
+            >
               { renderTextBtn() }
             </button>
           )

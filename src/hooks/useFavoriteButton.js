@@ -10,6 +10,7 @@ function useFavoriteButton() {
     favoriteRecipes }, setFavRecipes } = useContext(ReceitasContext);
   const { params: { id } } = useRouteMatch();
   const actualPath = useActualPath();
+
   function sackStorageFavorite() {
     const favItens = JSON.parse(localStorage.getItem('favoriteRecipes'));
     const newFavItens = [...favItens];
@@ -51,6 +52,8 @@ function useFavoriteButton() {
         localStorage.setItem('favoriteRecipes', newFavItens);
       }
     }
+    const newFavItem = JSON.stringify([favRecipe]);
+    localStorage.setItem('favoriteRecipes', newFavItem);
   }
 
   const toggleFavorite = (isFavorite, setFavorite) => {
